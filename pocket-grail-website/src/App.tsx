@@ -1,27 +1,44 @@
-import { useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import { Uppbar, Sidebar } from './components/navbar/navbar'
-import { UserProvider } from './context/UserContext'
+import type { ReactNode } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { useAuthInit } from './hooks/useAuthInit'
+import { selectRehydrated, selectIsAuthenticated } from './redux/slices/authSlice'
+import { ProtectedLayout } from './components/layout/ProtectedLayout'
 import { HomePage } from './pages/HomePage'
+import { AuthPage } from './pages/AuthPage'
+
+function PublicOnlyRoute({ children }: { children: ReactNode }) {
+	const isAuthenticated = useSelector(selectIsAuthenticated)
+	return isAuthenticated ? <Navigate to='/' replace /> : <>{children}</>
+}
 
 function App() {
-	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+	useAuthInit()
+	const rehydrated = useSelector(selectRehydrated)
+
+	if (!rehydrated) {
+		return (
+			<div className='flex h-screen items-center justify-center bg-(--color-bg)'>
+				<span className='text-white/50 text-sm'>Loading…</span>
+			</div>
+		)
+	}
 
 	return (
-		<UserProvider>
-			<div className='flex flex-col h-screen overflow-hidden'>
-				<Uppbar onBurgerClick={() => setIsSidebarOpen(prev => !prev)} />
-				<div className='flex flex-1 min-h-0'>
-					<Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-					<main className='flex-1 overflow-auto p-6'>
-						<Routes>
-							<Route path='/' element={<HomePage />} />
-							<Route path='/news' element={<div>News Page</div>} />
-						</Routes>
-					</main>
-				</div>
-			</div>
-		</UserProvider>
+		<Routes>
+			<Route
+				path='/auth'
+				element={
+					<PublicOnlyRoute>
+						<AuthPage />
+					</PublicOnlyRoute>
+				}
+			/>
+			<Route element={<ProtectedLayout />}>
+				<Route path='/' element={<HomePage />} />
+				<Route path='/news' element={<div>News Page</div>} />
+			</Route>
+		</Routes>
 	)
 }
 
