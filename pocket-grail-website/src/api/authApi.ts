@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { AuthUser, LoginRequest, RegisterRequest } from '../types/auth'
+import type { AuthUser, LoginRequest, RegisterRequest, PendingVerificationResponse, VerifyCodeRequest } from '../types/auth'
 
 export const authApi = createApi({
 	reducerPath: 'authApi',
@@ -9,11 +9,14 @@ export const authApi = createApi({
 	}),
 	tagTypes: ['AuthUser'],
 	endpoints: builder => ({
-		register: builder.mutation<Record<string, never>, RegisterRequest>({
+		register: builder.mutation<PendingVerificationResponse, RegisterRequest>({
 			query: body => ({ url: 'Auth/register', method: 'POST', body }),
 		}),
-		login: builder.mutation<Record<string, never>, LoginRequest>({
+		login: builder.mutation<PendingVerificationResponse, LoginRequest>({
 			query: body => ({ url: 'Auth/login', method: 'POST', body }),
+		}),
+		verify: builder.mutation<void, VerifyCodeRequest>({
+			query: body => ({ url: 'Auth/verify', method: 'POST', body }),
 		}),
 		me: builder.query<AuthUser, void>({
 			query: () => 'Auth/me',
@@ -29,6 +32,7 @@ export const authApi = createApi({
 export const {
 	useRegisterMutation,
 	useLoginMutation,
+	useVerifyMutation,
 	useLazyMeQuery,
 	useLogoutMutation,
 } = authApi

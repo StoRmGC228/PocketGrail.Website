@@ -17,3 +17,12 @@ export interface LoginRequest {
 	email: string
 	password: string
 }
+
+export interface PendingVerificationResponse {
+	email: string
+}
+
+export interface VerifyCodeRequest {
+	email: string
+	code: string
+}
