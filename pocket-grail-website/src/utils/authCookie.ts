@@ -4,7 +4,7 @@ import type { AuthUser } from '../types/auth'
 const KEY = 'pg_user'
 
 export const saveUserCookie = (user: AuthUser): void => {
-	Cookies.set(KEY, JSON.stringify(user), { expires: 7, sameSite: 'Lax' })
+	Cookies.set(KEY, JSON.stringify(user), { expires: 180, sameSite: 'Lax' })
 }
 
 export const readUserCookie = (): AuthUser | null => {
