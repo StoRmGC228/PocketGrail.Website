@@ -6,6 +6,10 @@ import { selectRehydrated, selectIsAuthenticated } from './redux/slices/authSlic
 import { ProtectedLayout } from './components/layout/ProtectedLayout'
 import { HomePage } from './pages/HomePage'
 import { AuthPage } from './pages/AuthPage'
+import { MyCampaignsPage } from './pages/MyCampaignsPage'
+import { ActiveCampaignsPage } from './pages/ActiveCampaignsPage'
+import { CampaignPage } from './pages/CampaignPage'
+import { JoinRedirectPage } from './pages/JoinRedirectPage'
 
 function PublicOnlyRoute({ children }: { children: ReactNode }) {
 	const isAuthenticated = useSelector(selectIsAuthenticated)
@@ -37,6 +41,10 @@ function App() {
 			<Route element={<ProtectedLayout />}>
 				<Route path='/' element={<HomePage />} />
 				<Route path='/news' element={<div>News Page</div>} />
+				<Route path='/my-campaigns' element={<MyCampaignsPage />} />
+				<Route path='/campaigns' element={<ActiveCampaignsPage />} />
+				<Route path='/campaigns/:id' element={<CampaignPage />} />
+				<Route path='/join/:code' element={<JoinRedirectPage />} />
 			</Route>
 		</Routes>
 	)

@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { HiHome, HiNewspaper } from 'react-icons/hi'
+import { HiHome, HiNewspaper, HiCollection, HiBookOpen } from 'react-icons/hi'
 import { HiMiniXMark, HiArrowRightOnRectangle } from 'react-icons/hi2'
 import { useDispatch } from 'react-redux'
 import { useLogoutMutation } from '../../../api/authApi'
@@ -21,6 +21,8 @@ interface NavItem {
 const navItems: NavItem[] = [
 	{ to: '/', label: 'Home', icon: <HiHome size={20} /> },
 	{ to: '/news', label: 'News', icon: <HiNewspaper size={20} /> },
+	{ to: '/campaigns', label: 'Campaigns', icon: <HiCollection size={20} /> },
+	{ to: '/my-campaigns', label: 'My Campaigns', icon: <HiBookOpen size={20} /> },
 ]
 
 export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
