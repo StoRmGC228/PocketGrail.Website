@@ -1,70 +1,40 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #38313b;
-  --color-nb: #9d22ca;
-}
-
-[data-theme='dark'] {
-  --color-bg: #38313b;
-  --color-nb: #9d22ca;
-}
-
-[data-theme='light'] {
-  --color-bg: #fbfbfb;
-  --color-nb: #c4d9ff;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
 }
 
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --bg: #0b0814;
+  --bg-2: #120c1f;
+  --panel: rgba(20, 14, 36, 0.7);
+  --panel-2: rgba(30, 20, 52, 0.55);
+  --border: rgba(168, 85, 247, 0.18);
+  --border-2: rgba(168, 85, 247, 0.32);
+  --text: #e9e3f7;
+  --text-dim: #9a8fb8;
+  --text-faint: #6b6285;
+  --accent: #a855f7;
+  --accent-2: #6366f1;
+  --gold: #e9b96b;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
   color: var(--text);
   background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+* {
+  box-sizing: border-box;
+}
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+body {
+  margin: 0;
+  background: var(--bg);
 }
 
 #root {
@@ -73,50 +43,117 @@
   flex-direction: column;
 }
 
-body {
+/* ── Typography ─────────────────────────────────────────────────── */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text);
   margin: 0;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
 p {
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+/* ── Grain overlay utility ──────────────────────────────────────── */
+.grain-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.25;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  border-radius: inherit;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* ── Pulse animation (hero tag dot) ─────────────────────────────── */
+@keyframes vA-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(233, 185, 107, 0.6); }
+  50%       { box-shadow: 0 0 0 7px rgba(233, 185, 107, 0); }
+}
+.pulse-gold {
+  animation: vA-pulse 2s ease-in-out infinite;
+}
+
+/* ── Search input ────────────────────────────────────────────────── */
+.search-input::placeholder {
+  color: var(--text-faint);
+}
+.search-input:focus {
+  outline: none;
+  border-color: var(--border-2) !important;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12);
+}
+
+/* ── Sidebar nav hover ───────────────────────────────────────────── */
+.sidebar-nav-item:hover {
+  background: rgba(168, 85, 247, 0.07) !important;
+  color: var(--text) !important;
+}
+
+/* ── Sidebar responsive breakpoints ─────────────────────────────── */
+@media (max-width: 639px) {
+  .sidebar {
+    display: none !important;
+  }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .sidebar {
+    width: 64px !important;
+  }
+  .sidebar-label,
+  .sidebar-section-label,
+  .sidebar-collapse-btn,
+  .sidebar-resume-card,
+  .sidebar-brand-text {
+    display: none !important;
+  }
+  .sidebar-nav-item {
+    justify-content: center !important;
+    padding: 12px 0 !important;
+  }
+  .sidebar-brand {
+    justify-content: center !important;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .sidebar:not([data-collapsed]) {
+    width: 220px !important;
+  }
+}
+
+/* ── Topbar responsive ───────────────────────────────────────────── */
+@media (max-width: 639px) {
+  .topbar {
+    display: none !important;
+  }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .topbar-crumbs,
+  .topbar-userinfo,
+  .topbar-quickcast {
+    display: none !important;
+  }
+}
+
+/* ── Mobile top bar ─────────────────────────────────────────────── */
+.mobile-topbar {
+  display: none;
+}
+@media (max-width: 639px) {
+  .mobile-topbar {
+    display: flex;
+  }
+}
+
+/* ── Bottom tab bar (mobile only) ────────────────────────────────── */
+.bottom-tabs {
+  display: none;
+}
+@media (max-width: 639px) {
+  .bottom-tabs {
+    display: grid;
+  }
 }
