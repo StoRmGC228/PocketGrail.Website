@@ -1,4 +1,5 @@
-import type { CampaignParticipantDto } from '../../types/campaign'
+import './ParticipantCard.css'
+import type { CampaignParticipantDto } from '../../../types/campaign'
 
 interface ParticipantCardProps {
 	participant: CampaignParticipantDto

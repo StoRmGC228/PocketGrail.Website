@@ -70,6 +70,8 @@ Tailwind v4 with custom CSS variables defined in `index.css`. Dark theme set glo
 
 ### Key Conventions
 
+- All folders names are in kebab case
+- All components are in pascal case
 - Types live in `src/types/` — `auth.ts` and `campaign.ts`
 - Cookie utilities in `src/utils/authCookie.ts`
 - Components organized by domain under `src/components/`

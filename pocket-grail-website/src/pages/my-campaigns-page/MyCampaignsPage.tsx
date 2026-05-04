@@ -1,14 +1,16 @@
+import './MyCampaignsPage.css'
+import '../../components/campaigns/campaign-layout.css'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { selectUser } from '../redux/slices/authSlice'
-import { useGetMyCampaignsQuery, useDeleteCampaignMutation } from '../api/campaignApi'
-import { CampaignCard } from '../components/campaigns/CampaignCard'
-import { CreateCampaignModal } from '../components/campaigns/CreateCampaignModal'
-import { JoinByCodeWidget } from '../components/campaigns/JoinByCodeWidget'
+import { selectUser } from '../../redux/slices/authSlice'
+import { useGetMyCampaignsQuery, useDeleteCampaignMutation } from '../../api/campaignApi'
+import { CampaignCard } from '../../components/campaigns/campaign-card/CampaignCard'
+import { CreateCampaignModal } from '../../components/campaigns/CreateCampaignModal'
+import { JoinByCodeWidget } from '../../components/campaigns/JoinByCodeWidget'
 import { HiPlus, HiLink } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
-import type { CampaignDto } from '../types/campaign'
+import type { CampaignDto } from '../../types/campaign'
 
 export const MyCampaignsPage = () => {
 	const user = useSelector(selectUser)

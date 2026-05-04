@@ -1,14 +1,16 @@
+import './ActiveCampaignsPage.css'
+import '../../components/campaigns/campaign-layout.css'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { selectUser } from '../redux/slices/authSlice'
-import { useGetActiveCampaignsQuery, useGetMyCampaignsQuery } from '../api/campaignApi'
-import { CampaignCard } from '../components/campaigns/CampaignCard'
-import { JoinByCodeWidget } from '../components/campaigns/JoinByCodeWidget'
-import { JoinByPasswordModal } from '../components/campaigns/JoinByPasswordModal'
-import { CreateCampaignModal } from '../components/campaigns/CreateCampaignModal'
+import { selectUser } from '../../redux/slices/authSlice'
+import { useGetActiveCampaignsQuery, useGetMyCampaignsQuery } from '../../api/campaignApi'
+import { CampaignCard } from '../../components/campaigns/campaign-card/CampaignCard'
+import { JoinByCodeWidget } from '../../components/campaigns/JoinByCodeWidget'
+import { JoinByPasswordModal } from '../../components/campaigns/JoinByPasswordModal'
+import { CreateCampaignModal } from '../../components/campaigns/CreateCampaignModal'
 import { HiLink, HiPlus } from 'react-icons/hi'
-import type { CampaignDto } from '../types/campaign'
+import type { CampaignDto } from '../../types/campaign'
 
 const FILTER_CHIPS = ['All', '5e', 'PF2e', 'Custom', 'Open Seats', 'Live now']
 
