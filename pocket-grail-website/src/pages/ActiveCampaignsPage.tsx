@@ -2,19 +2,28 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../redux/slices/authSlice'
-import { useGetActiveCampaignsQuery } from '../api/campaignApi'
+import { useGetActiveCampaignsQuery, useGetMyCampaignsQuery } from '../api/campaignApi'
 import { CampaignCard } from '../components/campaigns/CampaignCard'
 import { JoinByCodeWidget } from '../components/campaigns/JoinByCodeWidget'
 import { JoinByPasswordModal } from '../components/campaigns/JoinByPasswordModal'
+import { CreateCampaignModal } from '../components/campaigns/CreateCampaignModal'
+import { HiLink, HiPlus } from 'react-icons/hi'
 import type { CampaignDto } from '../types/campaign'
+
+const FILTER_CHIPS = ['All', '5e', 'PF2e', 'Custom', 'Open Seats', 'Live now']
 
 export const ActiveCampaignsPage = () => {
 	const { data: campaigns, isLoading } = useGetActiveCampaignsQuery()
+	const { data: myCampaigns } = useGetMyCampaignsQuery()
 	const [showCodeWidget, setShowCodeWidget] = useState(false)
+	const [showCreateModal, setShowCreateModal] = useState(false)
 	const [selectedCampaign, setSelectedCampaign] = useState<CampaignDto | null>(null)
+	const [activeFilter, setActiveFilter] = useState('All')
 	const navigate = useNavigate()
 	const user = useSelector(selectUser)
 	const isDm = user?.role === 'DungeonMaster'
+
+	const myIds = new Set(myCampaigns?.map(c => c.id) ?? [])
 
 	const handleJoinSuccess = (campaign: CampaignDto) => {
 		setSelectedCampaign(null)
@@ -23,8 +32,8 @@ export const ActiveCampaignsPage = () => {
 	}
 
 	const handleCardClick = (campaign: CampaignDto) => {
-		// DMs go straight to the campaign page — they don't need to join
-		if (isDm) {
+		// DMs always navigate directly; players who already joined also navigate directly
+		if (isDm || myIds.has(campaign.id)) {
 			navigate(`/campaigns/${campaign.id}`)
 		} else {
 			setSelectedCampaign(campaign)
@@ -32,15 +41,36 @@ export const ActiveCampaignsPage = () => {
 	}
 
 	return (
-		<div className='p-6 max-w-5xl mx-auto'>
-			<div className='flex items-center justify-between mb-6'>
-				<h1 className='text-white text-2xl font-bold'>Active Campaigns</h1>
-				<button
-					onClick={() => setShowCodeWidget(true)}
-					className='bg-white/10 border border-white/20 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-white/15 transition-colors cursor-pointer'
-				>
-					Join by Code
-				</button>
+		<div className='p-6 max-w-6xl mx-auto flex flex-col gap-6'>
+			<div className='page-head'>
+				<div>
+					<div className='vA-eyebrow'>Public Realms</div>
+					<h1 className='page-title'>Active Campaigns</h1>
+					<p className='page-sub'>Sit at a stranger's table. New seats open every day.</p>
+				</div>
+				<div className='page-actions'>
+					<button className='page-btn-ghost' onClick={() => setShowCodeWidget(true)}>
+						<HiLink size={14} /> Join by Code
+					</button>
+					{isDm && (
+						<button className='page-btn-primary' onClick={() => setShowCreateModal(true)}>
+							<HiPlus size={14} /> Host Campaign
+						</button>
+					)}
+				</div>
+			</div>
+
+			<div className='page-filters'>
+				{FILTER_CHIPS.map(chip => (
+					<button
+						key={chip}
+						className='filter-chip'
+						{...(chip === activeFilter ? { 'data-active': '' } : {})}
+						onClick={() => setActiveFilter(chip)}
+					>
+						{chip}
+					</button>
+				))}
 			</div>
 
 			{isLoading && (
@@ -52,18 +82,18 @@ export const ActiveCampaignsPage = () => {
 			)}
 
 			{campaigns && campaigns.length > 0 && (
-				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+				<div className='cc-grid'>
 					{campaigns.map(campaign => (
 						<CampaignCard
 							key={campaign.id}
 							campaign={campaign}
+							joined={!isDm && myIds.has(campaign.id)}
 							onClick={() => handleCardClick(campaign)}
 						/>
 					))}
 				</div>
 			)}
 
-			{/* Code join modal */}
 			{showCodeWidget && (
 				<JoinByCodeWidget
 					onSuccess={handleJoinSuccess}
@@ -71,7 +101,6 @@ export const ActiveCampaignsPage = () => {
 				/>
 			)}
 
-			{/* Password modal — players only */}
 			{!isDm && (
 				<JoinByPasswordModal
 					campaign={selectedCampaign}
@@ -79,6 +108,11 @@ export const ActiveCampaignsPage = () => {
 					onSuccess={handleJoinSuccess}
 				/>
 			)}
+
+			<CreateCampaignModal
+				isOpen={showCreateModal}
+				onClose={() => setShowCreateModal(false)}
+			/>
 		</div>
 	)
 }
