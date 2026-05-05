@@ -1,0 +1,19 @@
+/* ── Mobile top bar ─────────────────────────────────────────────── */
+.mobile-topbar {
+  display: none;
+}
+@media (max-width: 639px) {
+  .mobile-topbar {
+    display: flex;
+  }
+}
+
+/* ── Bottom tab bar (mobile only) ────────────────────────────────── */
+.bottom-tabs {
+  display: none;
+}
+@media (max-width: 639px) {
+  .bottom-tabs {
+    display: grid;
+  }
+}

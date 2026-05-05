@@ -1,9 +1,11 @@
+import './CampaignPage.css'
+import '../../components/campaigns/campaign-layout.css'
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { selectUser } from '../redux/slices/authSlice'
-import { useGetCampaignByIdQuery, useLeaveCampaignMutation } from '../api/campaignApi'
-import { ParticipantCard } from '../components/campaigns/ParticipantCard'
+import { selectUser } from '../../redux/slices/authSlice'
+import { useGetCampaignByIdQuery, useLeaveCampaignMutation } from '../../api/campaignApi'
+import { ParticipantCard } from '../../components/campaigns/participant-card/ParticipantCard'
 import { HiUsers, HiClipboard, HiLink, HiCheck, HiX, HiArrowLeft } from 'react-icons/hi'
 
 const ART_GRADIENTS = [

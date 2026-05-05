@@ -1,3 +1,4 @@
+import './sidebar.css'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useLogoutMutation } from '../../../api/authApi'

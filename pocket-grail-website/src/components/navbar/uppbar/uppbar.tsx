@@ -1,3 +1,4 @@
+import './uppbar.css'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../../../redux/slices/authSlice'
 import { HiBell, HiMagnifyingGlass } from 'react-icons/hi2'

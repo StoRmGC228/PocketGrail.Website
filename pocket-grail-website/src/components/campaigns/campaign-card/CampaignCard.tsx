@@ -1,6 +1,7 @@
+import './CampaignCard.css'
 import { useState } from 'react'
 import { HiUsers, HiClipboard, HiLink, HiTrash, HiCheck } from 'react-icons/hi'
-import type { CampaignDto } from '../../types/campaign'
+import type { CampaignDto } from '../../../types/campaign'
 
 const ART_GRADIENTS = [
 	'linear-gradient(135deg,#1e1b4b,#4c1d95 50%,#831843)',
