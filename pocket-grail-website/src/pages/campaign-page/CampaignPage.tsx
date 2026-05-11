@@ -121,13 +121,12 @@ export const CampaignPage = () => {
 					</button>
 				</div>
 
-				{/* Content column */}
+				{/* Content column — overlay: eyebrow + title + meta */}
 				<div className='cd-hero-content'>
-					<div className='vA-eyebrow'>
+					<div className={`vA-eyebrow${campaign.isActive ? ' cd-eyebrow--active' : ''}`}>
 						{campaign.isActive ? '● Live' : 'Campaign'}
 					</div>
 					<h1 className='cd-hero-title'>{campaign.name}</h1>
-					<p className='cd-hero-desc'>{campaign.shortDescription}</p>
 					<div className='cd-hero-meta'>
 						<span>
 							<HiUsers size={13} />
@@ -135,6 +134,11 @@ export const CampaignPage = () => {
 						</span>
 						<span>Created {createdDate}</span>
 					</div>
+				</div>
+
+				{/* Actions — description + CTA buttons; on mobile sits between image and DM */}
+				<div className='cd-hero-actions'>
+					<p className='cd-hero-desc'>{campaign.shortDescription}</p>
 					<div className='cd-hero-cta'>
 						{canLeave && (
 							<button
