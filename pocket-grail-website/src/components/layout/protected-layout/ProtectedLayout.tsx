@@ -1,8 +1,9 @@
+import './ProtectedLayout.css'
 import { useState } from 'react'
 import { Navigate, Outlet, NavLink, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { selectIsAuthenticated } from '../../redux/slices/authSlice'
-import { Uppbar, Sidebar } from '../navbar/navbar'
+import { selectIsAuthenticated } from '../../../redux/slices/authSlice'
+import { Uppbar, Sidebar } from '../../navbar/navbar'
 import { HiHome, HiNewspaper, HiCollection, HiUsers } from 'react-icons/hi'
 
 const BOTTOM_TABS = [

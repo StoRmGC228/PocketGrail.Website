@@ -1,6 +1,7 @@
+import './uppbar.css'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../../../redux/slices/authSlice'
-import { HiBell, HiMagnifyingGlass, HiArrowRight } from 'react-icons/hi2'
+import { HiBell, HiMagnifyingGlass } from 'react-icons/hi2'
 import { HiViewGrid } from 'react-icons/hi'
 
 export const Uppbar = () => {
@@ -25,25 +26,6 @@ export const Uppbar = () => {
 				zIndex: 30,
 			}}
 		>
-			{/* Breadcrumb */}
-			<div
-				className="topbar-crumbs"
-				style={{
-					display: 'flex',
-					alignItems: 'center',
-					gap: 6,
-					fontSize: 13,
-					color: 'var(--text-dim)',
-					paddingRight: 14,
-					borderRight: '1px solid var(--border)',
-					height: 32,
-					flexShrink: 0,
-				}}
-			>
-				<HiArrowRight size={14} style={{ color: 'var(--accent)', transform: 'rotate(-135deg)' }} />
-				<span style={{ color: 'var(--text)' }}>Home</span>
-			</div>
-
 			{/* Search */}
 			<div
 				style={{

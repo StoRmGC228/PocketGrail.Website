@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { selectUser } from '../redux/slices/authSlice'
 import { HiUsers, HiGift, HiViewGrid } from 'react-icons/hi'
 import { HiArrowRight, HiHeart } from 'react-icons/hi2'
 import type { IconType } from 'react-icons'
@@ -229,6 +231,8 @@ const btnGhost: React.CSSProperties = {
 /* ── Home Page ───────────────────────────────────────────────────── */
 export const HomePage = () => {
 	const navigate = useNavigate()
+	const user = useSelector(selectUser)
+	const isDm = user?.role === 'DungeonMaster'
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
@@ -524,9 +528,11 @@ export const HomePage = () => {
 						<button style={btnPrimary} onClick={() => navigate('/campaigns')}>
 							Browse Campaigns <HiArrowRight size={13} />
 						</button>
-						<button style={btnGhost} onClick={() => navigate('/my-campaigns')}>
-							+ Host one
-						</button>
+						{isDm && (
+							<button style={btnGhost} onClick={() => navigate('/my-campaigns')}>
+								+ Host one
+							</button>
+						)}
 					</div>
 				</div>
 				<CodexTile

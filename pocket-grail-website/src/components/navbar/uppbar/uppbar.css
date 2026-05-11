@@ -1,0 +1,23 @@
+/* ── Search input ────────────────────────────────────────────────── */
+.search-input::placeholder {
+  color: var(--text-faint);
+}
+.search-input:focus {
+  outline: none;
+  border-color: var(--border-2) !important;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12);
+}
+
+/* ── Topbar responsive ───────────────────────────────────────────── */
+@media (max-width: 639px) {
+  .topbar {
+    display: none !important;
+  }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .topbar-crumbs,
+  .topbar-userinfo,
+  .topbar-quickcast {
+    display: none !important;
+  }
+}
