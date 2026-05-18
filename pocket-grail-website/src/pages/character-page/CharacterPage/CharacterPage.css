@@ -1,0 +1,236 @@
+.ch-page {
+	display: flex;
+	flex-direction: column;
+	min-height: 100svh;
+	background: var(--bg);
+}
+
+.ch-page-loading,
+.ch-page-error {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	min-height: 60vh;
+	color: var(--text-dim);
+	font-size: 14px;
+}
+
+.ch-page-error button {
+	color: var(--accent);
+	background: none;
+	border: none;
+	cursor: pointer;
+	text-decoration: underline;
+	font-size: 14px;
+}
+
+/* ── Tab bar (mobile only) ──────────────────────────────────────── */
+.ch-tabs {
+	display: none;
+	overflow-x: auto;
+	scrollbar-width: none;
+	gap: 4px;
+	padding: 10px 14px;
+	background: var(--bg-2);
+	border-bottom: 1px solid var(--border);
+	position: sticky;
+	top: 0;
+	z-index: 20;
+}
+
+.ch-tabs::-webkit-scrollbar {
+	display: none;
+}
+
+.ch-tab {
+	flex-shrink: 0;
+	padding: 6px 14px;
+	border-radius: 20px;
+	font: 600 12px var(--font-body);
+	border: 1px solid var(--border);
+	background: transparent;
+	color: var(--text-dim);
+	cursor: pointer;
+	transition: all 0.15s;
+	white-space: nowrap;
+}
+
+.ch-tab.active {
+	background: var(--accent);
+	border-color: var(--accent);
+	color: #fff;
+}
+
+/* ── Desktop layout ─────────────────────────────────────────────── */
+.ch-railwrap {
+	display: flex;
+	align-items: flex-start;
+	gap: 0;
+	max-width: 1400px;
+	margin: 0 auto;
+	width: 100%;
+	padding: 24px 24px 60px;
+	flex: 1;
+}
+
+.ch-rail {
+	width: 320px;
+	flex-shrink: 0;
+	position: sticky;
+	top: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	max-height: calc(100svh - 48px);
+	overflow-y: auto;
+	scrollbar-width: thin;
+	scrollbar-color: var(--border-2) transparent;
+	padding-right: 8px;
+}
+
+.ch-rail::-webkit-scrollbar {
+	width: 4px;
+}
+
+.ch-rail::-webkit-scrollbar-thumb {
+	background: var(--border-2);
+	border-radius: 2px;
+}
+
+.ch-rail-stats {
+	margin-top: 0;
+}
+
+.ch-rail-body {
+	flex: 1;
+	min-width: 0;
+	padding-left: 28px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.ch-rail-body-section {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+/* ── Section shared ─────────────────────────────────────────────── */
+.ch-sec {
+	background: linear-gradient(180deg, rgba(20, 14, 36, 0.7), rgba(14, 10, 26, 0.6));
+	border: 1px solid var(--border);
+	border-radius: 16px;
+	overflow: hidden;
+}
+
+.ch-sec-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 18px;
+	border-bottom: 1px solid var(--border);
+}
+
+.ch-sec-head h3 {
+	font-family: var(--font-display);
+	font-size: 17px;
+	font-weight: 600;
+	color: var(--text);
+	margin: 0;
+}
+
+.ch-add-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 14px;
+	border-radius: 8px;
+	background: rgba(168, 85, 247, 0.15);
+	border: 1px solid var(--border-2);
+	color: var(--accent);
+	font: 600 12px var(--font-body);
+	cursor: pointer;
+	transition: all 0.15s;
+}
+
+.ch-add-btn:hover {
+	background: rgba(168, 85, 247, 0.25);
+}
+
+.ch-del-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 26px;
+	height: 26px;
+	border-radius: 6px;
+	background: transparent;
+	border: 1px solid transparent;
+	color: var(--text-faint);
+	cursor: pointer;
+	transition: all 0.15s;
+	flex-shrink: 0;
+}
+
+.ch-del-btn:hover {
+	background: rgba(239, 68, 68, 0.12);
+	border-color: rgba(239, 68, 68, 0.3);
+	color: #ef4444;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+	.ch-railwrap {
+		flex-direction: column;
+		padding: 16px 16px 60px;
+	}
+
+	.ch-rail {
+		width: 100%;
+		position: static;
+		max-height: none;
+		overflow-y: visible;
+		padding-right: 0;
+	}
+
+	.ch-rail-body {
+		padding-left: 0;
+	}
+}
+
+@media (max-width: 600px) {
+	.ch-tabs {
+		display: flex;
+	}
+
+	.ch-railwrap {
+		padding: 0;
+	}
+
+	.ch-rail,
+	.ch-rail-body,
+	.ch-rail-body-section {
+		gap: 0;
+	}
+
+	.ch-rail {
+		display: none;
+	}
+
+	.ch-rail.ch-rail--mobile-visible {
+		display: flex;
+		padding: 14px;
+		gap: 14px;
+	}
+
+	.ch-rail-body-section {
+		display: none;
+		padding: 14px;
+	}
+
+	.ch-rail-body-section.ch-section--mobile-visible {
+		display: flex;
+	}
+}

@@ -1,5 +1,6 @@
 import './MyCharactersPage.css'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useGetMyCharactersQuery, useDeleteCharacterMutation } from '../../api/characterApi'
 import { CharacterCard } from '../../components/characters/character-card/CharacterCard'
 import { CreateCharacterModal } from '../../components/characters/create-character-modal/CreateCharacterModal'
@@ -9,6 +10,7 @@ import type { CharacterDto } from '../../types/character'
 const PER_PAGE = 8
 
 export const MyCharactersPage = () => {
+	const navigate = useNavigate()
 	const { data: characters, isLoading } = useGetMyCharactersQuery()
 	const [deleteCharacter, { isLoading: isDeleting }] = useDeleteCharacterMutation()
 
@@ -110,6 +112,7 @@ export const MyCharactersPage = () => {
 							key={c.id}
 							character={c}
 							delMode={delMode}
+							onClick={() => !delMode && navigate(`/characters/${c.id}`)}
 							onDelete={handleDeleteRequest}
 						/>
 					))}

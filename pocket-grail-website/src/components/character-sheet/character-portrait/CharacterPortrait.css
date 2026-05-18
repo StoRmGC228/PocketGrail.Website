@@ -1,0 +1,60 @@
+.ch-portrait {
+	position: relative;
+	border-radius: 14px;
+	overflow: hidden;
+	border: 1px solid var(--border-2);
+	background: var(--bg-2);
+}
+
+.ch-portrait-art {
+	aspect-ratio: 7 / 9;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	background-size: cover;
+	background-position: center;
+}
+
+.ch-portrait-initial {
+	font-family: var(--font-display);
+	font-size: 72px;
+	font-weight: 700;
+	color: rgba(255, 255, 255, 0.5);
+	position: relative;
+	z-index: 1;
+	text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.ch-portrait-scrim {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, transparent 50%, rgba(6, 4, 13, 0.85) 100%);
+	pointer-events: none;
+}
+
+.ch-portrait-foot {
+	padding: 10px;
+	display: flex;
+	justify-content: center;
+	border-top: 1px solid var(--border);
+}
+
+.ch-portrait-edit {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 16px;
+	border-radius: 8px;
+	background: rgba(168, 85, 247, 0.1);
+	border: 1px solid var(--border-2);
+	color: var(--accent);
+	font: 600 12px var(--font-body);
+	cursor: pointer;
+	transition: all 0.15s;
+}
+
+.ch-portrait-edit:hover {
+	background: rgba(168, 85, 247, 0.22);
+}
