@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { ClassDto, SubclassDto } from '../types/character'
+import type { ClassDto, SubclassDto, ClassStartingItemSetDto } from '../types/character'
 
 export const classApi = createApi({
 	reducerPath: 'classApi',
@@ -17,7 +17,11 @@ export const classApi = createApi({
 			query: className => `Classes/${className}/subclasses`,
 			providesTags: ['Class'],
 		}),
+		getStartingItems: builder.query<ClassStartingItemSetDto, string>({
+			query: className => `Classes/${className}/starting-items`,
+			providesTags: ['Class'],
+		}),
 	}),
 })
 
-export const { useGetClassesQuery, useGetSubclassesQuery } = classApi
+export const { useGetClassesQuery, useGetSubclassesQuery, useGetStartingItemsQuery } = classApi

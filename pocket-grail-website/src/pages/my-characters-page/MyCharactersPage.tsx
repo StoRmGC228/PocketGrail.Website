@@ -2,6 +2,8 @@ import './MyCharactersPage.css'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGetMyCharactersQuery, useDeleteCharacterMutation } from '../../api/characterApi'
+import { useGetRacesQuery } from '../../api/raceApi'
+import { useGetClassesQuery } from '../../api/classApi'
 import { CharacterCard } from '../../components/characters/character-card/CharacterCard'
 import { CreateCharacterModal } from '../../components/characters/create-character-modal/CreateCharacterModal'
 import { DeleteCharacterModal } from '../../components/characters/delete-character-modal/DeleteCharacterModal'
@@ -13,6 +15,9 @@ export const MyCharactersPage = () => {
 	const navigate = useNavigate()
 	const { data: characters, isLoading } = useGetMyCharactersQuery()
 	const [deleteCharacter, { isLoading: isDeleting }] = useDeleteCharacterMutation()
+	// Pre-warm the cache so the create modal opens instantly
+	useGetRacesQuery()
+	useGetClassesQuery()
 
 	const [page, setPage] = useState(1)
 	const [delMode, setDelMode] = useState(false)

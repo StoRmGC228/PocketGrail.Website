@@ -210,6 +210,94 @@
 	transform: translateY(-1px);
 }
 
+/* Wider variant for image preview */
+.ccm-modal {
+	max-width: 520px;
+}
+
+/* Portrait upload */
+.ccm-img-upload {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 12px;
+	background: rgba(11, 8, 20, 0.6);
+	border: 1px dashed var(--border-2);
+	border-radius: 10px;
+	color: var(--text-dim);
+	font: 500 13px var(--font-body);
+	cursor: pointer;
+	transition: all 0.15s;
+}
+
+.ccm-img-upload:hover {
+	border-color: var(--accent);
+	color: var(--text);
+}
+
+.ccm-img-file-input {
+	display: none;
+}
+
+.ccm-img-preview-wrap {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.ccm-img-hint {
+	font-size: 11px;
+	color: var(--text-faint);
+	margin: 0;
+}
+
+.ccm-img-container {
+	position: relative;
+	width: 100%;
+	max-height: 200px;
+	overflow: hidden;
+	border-radius: 8px;
+	background: #000;
+	user-select: none;
+}
+
+.ccm-img {
+	width: 100%;
+	height: 200px;
+	object-fit: contain;
+	display: block;
+}
+
+.ccm-img-dim {
+	position: absolute;
+	left: 0;
+	right: 0;
+	background: rgba(0, 0, 0, 0.55);
+	pointer-events: none;
+}
+
+.ccm-img-dim-top    { top: 0; }
+.ccm-img-dim-bottom { bottom: 0; }
+.ccm-img-dim-left, .ccm-img-dim-right {
+	position: absolute;
+	left: unset;
+	right: unset;
+}
+.ccm-img-dim-left  { left: 0; }
+.ccm-img-dim-right { right: 0; }
+
+.ccm-img-crop {
+	position: absolute;
+	border: 2px solid rgba(168, 85, 247, 0.85);
+	box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.25);
+	cursor: grab;
+	border-radius: 2px;
+}
+
+.ccm-img-crop:active {
+	cursor: grabbing;
+}
+
 /* Target preview (delete modal) */
 .rst-modal-target {
 	display: flex;
