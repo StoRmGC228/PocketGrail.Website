@@ -290,7 +290,24 @@ export interface ClassDto {
 	hitDice: string
 	spellAbility?: string
 	skillChoiceCount: number
+	availableSkillChoices: string[]
 	subclasses: SubclassDto[]
+}
+
+export interface StartingItemDto {
+	id: number
+	name: string
+	description?: string
+}
+
+export interface StartingItemChoicePairDto {
+	id: number
+	optionA: StartingItemDto[]
+	optionB: StartingItemDto[]
+}
+
+export interface ClassStartingItemSetDto {
+	choicePairs: StartingItemChoicePairDto[]
 }
 
 export interface RaceFeatureDto {
@@ -310,6 +327,8 @@ export interface RaceDto {
 	wisBonus: number
 	chaBonus: number
 	flexibleBonusPoints: number
+	// Each element is the max value for that flex slot (e.g. [2,1] = one +2 and one +1)
+	flexBonusSlots: number[]
 	weaponGrants: string[]
 	armorGrants: string[]
 	languageGrants: string[]
@@ -344,8 +363,11 @@ export interface CreateCharacterFormValues {
 	name: string
 	race: string
 	className: string
+	startLevel: number
+	subclassId?: number
 	campaignId?: number
 	image?: File | null
+	imageCrop?: { x: number; y: number; width: number; height: number } | null
 	strScore: number
 	dexScore: number
 	conScore: number

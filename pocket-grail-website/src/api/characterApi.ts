@@ -49,7 +49,7 @@ export const characterApi = createApi({
 		}),
 		createCharacter: builder.mutation<CharacterDto, CreateCharacterFormValues>({
 			query: ({
-				name, race, className, campaignId, image,
+				name, race, className, startLevel, subclassId, campaignId, image,
 				strScore, dexScore, conScore, intScore, wisScore, chaScore,
 				flexStrBonus, flexDexBonus, flexConBonus, flexIntBonus, flexWisBonus, flexChaBonus,
 				startingItemIds, skillChoices, weaponChoices, armorChoices, languageChoices, instrumentChoices,
@@ -58,6 +58,8 @@ export const characterApi = createApi({
 				body.append('name', name)
 				body.append('race', race)
 				body.append('className', className)
+				body.append('startLevel', String(startLevel))
+				if (subclassId) body.append('subclassId', String(subclassId))
 				if (campaignId) body.append('campaignId', String(campaignId))
 				if (image) body.append('image', image)
 				body.append('strScore', String(strScore))

@@ -1,0 +1,72 @@
+.rcm-slots {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.rcm-slot {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.rcm-slot-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 40px;
+	padding: 4px 10px;
+	background: linear-gradient(135deg, var(--accent), var(--accent-2));
+	border-radius: 6px;
+	font: 700 13px var(--font-body);
+	color: #fff;
+	flex-shrink: 0;
+	box-shadow: 0 4px 12px -4px rgba(168, 85, 247, 0.6);
+}
+
+.rcm-slot-select {
+	flex: 1;
+	background: rgba(11, 8, 20, 0.6);
+	border: 1px solid var(--border);
+	color: var(--text);
+	padding: 10px 12px;
+	border-radius: 10px;
+	font: 500 13px var(--font-body);
+	outline: none;
+	transition: border-color 0.15s;
+}
+
+.rcm-slot-select:focus {
+	border-color: var(--accent);
+}
+
+.rcm-slot-select option {
+	background: #120c1f;
+	color: var(--text);
+}
+
+.rcm-slot-select option:disabled {
+	color: var(--text-faint);
+}
+
+.rcm-summary {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	min-height: 26px;
+	align-items: center;
+}
+
+.rcm-summary-chip {
+	padding: 3px 10px;
+	background: rgba(168, 85, 247, 0.15);
+	border: 1px solid rgba(168, 85, 247, 0.35);
+	border-radius: 6px;
+	font: 600 12px var(--font-body);
+	color: rgba(216, 180, 254, 0.9);
+}
+
+.rcm-summary-hint {
+	font-size: 12px;
+	color: var(--text-faint);
+}
