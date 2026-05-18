@@ -14,8 +14,12 @@ import type {
 	AddFeatureRequest,
 	AddProficiencyRequest,
 	UpdateSpellSlotRequest,
+	AddCharacterClassRequest,
+	LevelUpRequest,
+	LevelUpResponse,
+	SetSubclassRequest,
+	UpdateCharacterClassRequest,
 	ItemDto,
-	SpellDto,
 	FeatDto,
 	FeatureDto,
 	ProficiencyDto,
@@ -44,32 +48,50 @@ export const characterApi = createApi({
 			providesTags: ['CharacterSheet'],
 		}),
 		createCharacter: builder.mutation<CharacterDto, CreateCharacterFormValues>({
-			query: ({ name, race, class: cls, level, campaignId, image }) => {
+			query: ({
+				name, race, className, campaignId, image,
+				strScore, dexScore, conScore, intScore, wisScore, chaScore,
+				flexStrBonus, flexDexBonus, flexConBonus, flexIntBonus, flexWisBonus, flexChaBonus,
+				startingItemIds, skillChoices, weaponChoices, armorChoices, languageChoices, instrumentChoices,
+			}) => {
 				const body = new FormData()
 				body.append('name', name)
 				body.append('race', race)
-				body.append('class', cls)
-				body.append('level', String(level))
+				body.append('className', className)
 				if (campaignId) body.append('campaignId', String(campaignId))
 				if (image) body.append('image', image)
+				body.append('strScore', String(strScore))
+				body.append('dexScore', String(dexScore))
+				body.append('conScore', String(conScore))
+				body.append('intScore', String(intScore))
+				body.append('wisScore', String(wisScore))
+				body.append('chaScore', String(chaScore))
+				body.append('flexStrBonus', String(flexStrBonus))
+				body.append('flexDexBonus', String(flexDexBonus))
+				body.append('flexConBonus', String(flexConBonus))
+				body.append('flexIntBonus', String(flexIntBonus))
+				body.append('flexWisBonus', String(flexWisBonus))
+				body.append('flexChaBonus', String(flexChaBonus))
+				startingItemIds.forEach(id => body.append('startingItemIds', String(id)))
+				skillChoices.forEach(c => body.append('skillChoices', c))
+				weaponChoices.forEach(c => body.append('weaponChoices', c))
+				armorChoices.forEach(c => body.append('armorChoices', c))
+				languageChoices.forEach(c => body.append('languageChoices', c))
+				instrumentChoices.forEach(c => body.append('instrumentChoices', c))
 				return { url: 'Characters', method: 'POST', body }
 			},
 			invalidatesTags: ['Character'],
 		}),
 		updateCharacter: builder.mutation<CharacterDto, UpdateCharacterFormValues>({
-			query: ({ id, name, race, class: cls, subclass, level, currentHp, maxHp, campaignId, image, alignment, spellAbility, backgroundStory, appearance, notes }) => {
+			query: ({ id, name, race, currentHp, maxHp, campaignId, image, alignment, backgroundStory, appearance, notes }) => {
 				const body = new FormData()
 				if (name) body.append('name', name)
 				if (race) body.append('race', race)
-				if (cls) body.append('class', cls)
-				if (subclass !== undefined) body.append('subclass', subclass)
-				if (level !== undefined) body.append('level', String(level))
 				if (currentHp !== undefined) body.append('currentHp', String(currentHp))
 				if (maxHp !== undefined) body.append('maxHp', String(maxHp))
 				if (campaignId !== undefined) body.append('campaignId', String(campaignId))
 				if (image) body.append('image', image)
 				if (alignment !== undefined) body.append('alignment', alignment)
-				if (spellAbility !== undefined) body.append('spellAbility', spellAbility)
 				if (backgroundStory !== undefined) body.append('backgroundStory', backgroundStory)
 				if (appearance !== undefined) body.append('appearance', appearance)
 				if (notes !== undefined) body.append('notes', notes)
@@ -117,11 +139,11 @@ export const characterApi = createApi({
 			query: ({ characterId, itemId }) => ({ url: `Characters/${characterId}/items/${itemId}`, method: 'DELETE' }),
 			invalidatesTags: ['CharacterSheet'],
 		}),
-		addSpell: builder.mutation<SpellDto, { id: number } & AddSpellRequest>({
+		addSpell: builder.mutation<CharacterDetailDto, { id: number } & AddSpellRequest>({
 			query: ({ id, ...body }) => ({ url: `Characters/${id}/spells`, method: 'POST', body }),
 			invalidatesTags: ['CharacterSheet'],
 		}),
-		toggleSpellPrepared: builder.mutation<SpellDto, { characterId: number; spellId: number }>({
+		toggleSpellPrepared: builder.mutation<CharacterDetailDto, { characterId: number; spellId: number }>({
 			query: ({ characterId, spellId }) => ({ url: `Characters/${characterId}/spells/${spellId}/toggle-prepared`, method: 'PATCH' }),
 			invalidatesTags: ['CharacterSheet'],
 		}),
@@ -161,6 +183,26 @@ export const characterApi = createApi({
 			query: id => `Characters/${id}/allies`,
 			providesTags: ['CharacterSheet'],
 		}),
+		addCharacterClass: builder.mutation<CharacterDetailDto, { id: number } & AddCharacterClassRequest>({
+			query: ({ id, ...body }) => ({ url: `Characters/${id}/classes`, method: 'POST', body }),
+			invalidatesTags: ['Character', 'CharacterSheet'],
+		}),
+		levelUp: builder.mutation<LevelUpResponse, { id: number; classId: number; body?: LevelUpRequest }>({
+			query: ({ id, classId, body }) => ({ url: `Characters/${id}/classes/${classId}/level-up`, method: 'POST', body: body ?? {} }),
+			invalidatesTags: ['Character', 'CharacterSheet'],
+		}),
+		setSubclass: builder.mutation<CharacterDetailDto, { id: number; classId: number } & SetSubclassRequest>({
+			query: ({ id, classId, ...body }) => ({ url: `Characters/${id}/classes/${classId}/subclass`, method: 'PATCH', body }),
+			invalidatesTags: ['CharacterSheet'],
+		}),
+		updateCharacterClass: builder.mutation<CharacterDetailDto, { id: number; classId: number } & UpdateCharacterClassRequest>({
+			query: ({ id, classId, ...body }) => ({ url: `Characters/${id}/classes/${classId}`, method: 'PATCH', body }),
+			invalidatesTags: ['CharacterSheet'],
+		}),
+		deleteCharacterClass: builder.mutation<void, { id: number; classId: number }>({
+			query: ({ id, classId }) => ({ url: `Characters/${id}/classes/${classId}`, method: 'DELETE' }),
+			invalidatesTags: ['Character', 'CharacterSheet'],
+		}),
 	}),
 })
 
@@ -189,4 +231,9 @@ export const {
 	useAddProficiencyMutation,
 	useDeleteProficiencyMutation,
 	useGetAlliesQuery,
+	useAddCharacterClassMutation,
+	useLevelUpMutation,
+	useSetSubclassMutation,
+	useUpdateCharacterClassMutation,
+	useDeleteCharacterClassMutation,
 } = characterApi

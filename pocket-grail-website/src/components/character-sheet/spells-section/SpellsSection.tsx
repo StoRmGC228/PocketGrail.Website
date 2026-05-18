@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import './SpellsSection.css'
 import type { CharacterDetailDto, SpellDto } from '../../../types/character'
-import { getAbilityMod, getProfBonus } from '../../../types/character'
 import {
 	useDeleteSpellMutation,
 	useToggleSpellPreparedMutation,
@@ -13,14 +12,6 @@ interface SpellsSectionProps {
 	onAddSpell: () => void
 }
 
-const ABILITY_SCORE_MAP: Record<string, keyof Pick<CharacterDetailDto, 'strScore' | 'dexScore' | 'conScore' | 'intScore' | 'wisScore' | 'chaScore'>> = {
-	STR: 'strScore',
-	DEX: 'dexScore',
-	CON: 'conScore',
-	INT: 'intScore',
-	WIS: 'wisScore',
-	CHA: 'chaScore',
-}
 
 function SpellLevelGroup({
 	level,
@@ -124,15 +115,6 @@ function SpellLevelGroup({
 export const SpellsSection = ({ character, onAddSpell }: SpellsSectionProps) => {
 	const [updateSpellSlot] = useUpdateSpellSlotMutation()
 
-	const profBonus = getProfBonus(character.level)
-	const spellAbilityKey = character.spellAbility
-		? ABILITY_SCORE_MAP[character.spellAbility.toUpperCase()]
-		: undefined
-	const spellAbilityScore = spellAbilityKey ? character[spellAbilityKey] : 0
-	const spellMod = getAbilityMod(spellAbilityScore)
-	const spellSaveDC = 8 + profBonus + spellMod
-	const spellAtkBonus = profBonus + spellMod
-
 	// Group spells by level
 	const spellsByLevel: Record<number, SpellDto[]> = {}
 	for (const spell of character.spells) {
@@ -161,23 +143,6 @@ export const SpellsSection = ({ character, onAddSpell }: SpellsSectionProps) => 
 				</button>
 			</div>
 
-			{/* Spell casting stats */}
-			{character.spellAbility && (
-				<div className='ch-spells-stats'>
-					<div className='ch-spell-stat-tile'>
-						<div className='ch-spell-stat-val'>{spellSaveDC}</div>
-						<div className='ch-spell-stat-lbl'>Save DC</div>
-					</div>
-					<div className='ch-spell-stat-tile'>
-						<div className='ch-spell-stat-val'>{spellAtkBonus >= 0 ? '+' : ''}{spellAtkBonus}</div>
-						<div className='ch-spell-stat-lbl'>ATK Bonus</div>
-					</div>
-					<div className='ch-spell-stat-tile'>
-						<div className='ch-spell-stat-val'>{character.spellAbility}</div>
-						<div className='ch-spell-stat-lbl'>Ability</div>
-					</div>
-				</div>
-			)}
 
 			{character.spells.length === 0 ? (
 				<div className='ch-empty'>No spells added yet.</div>

@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import './StatsRail.css'
-import type { CharacterDetailDto, UpdateStatsRequest } from '../../../types/character'
+import type { CharacterDetailDto } from '../../../types/character'
 import { getAbilityMod, getProfBonus } from '../../../types/character'
 import { useUpdateStatsMutation } from '../../../api/characterApi'
 
+type AbilityScoreKey = 'strScore' | 'dexScore' | 'conScore' | 'intScore' | 'wisScore' | 'chaScore'
+
 interface Ability {
-	key: keyof UpdateStatsRequest
+	key: AbilityScoreKey
 	abbr: string
 	label: string
 	skills: { name: string; key: string }[]
@@ -80,7 +82,7 @@ export const StatsRail = ({ character }: StatsRailProps) => {
 
 	const profBonus = getProfBonus(character.level)
 
-	const scores: Record<keyof UpdateStatsRequest, number> = {
+	const scores: Record<AbilityScoreKey, number> = {
 		strScore: character.strScore,
 		dexScore: character.dexScore,
 		conScore: character.conScore,
@@ -89,10 +91,10 @@ export const StatsRail = ({ character }: StatsRailProps) => {
 		chaScore: character.chaScore,
 	}
 
-	const [editing, setEditing] = useState<keyof UpdateStatsRequest | null>(null)
+	const [editing, setEditing] = useState<AbilityScoreKey | null>(null)
 	const [inputVal, setInputVal] = useState('')
 
-	const startEdit = (key: keyof UpdateStatsRequest) => {
+	const startEdit = (key: AbilityScoreKey) => {
 		setEditing(key)
 		setInputVal(String(scores[key]))
 	}
@@ -110,14 +112,11 @@ export const StatsRail = ({ character }: StatsRailProps) => {
 		setEditing(null)
 	}
 
-	// Get skill proficiency from character proficiencies
 	const skillProfMap: Record<string, boolean> = {}
 	const skillExpertMap: Record<string, boolean> = {}
-	for (const prof of character.proficiencies) {
-		if (prof.proficiencyType === 'skill' && prof.abilityKey) {
-			skillProfMap[prof.abilityKey] = true
-			if (prof.hasExpertise) skillExpertMap[prof.abilityKey] = true
-		}
+	for (const prof of character.skillProficiencies) {
+		skillProfMap[prof.skill] = true
+		if (prof.hasExpertise) skillExpertMap[prof.skill] = true
 	}
 
 	const getSkillMod = (abilityScore: number, skillKey: string): number => {

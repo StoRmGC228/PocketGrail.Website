@@ -1,36 +1,34 @@
 import './ProficienciesSection.css'
-import type { CharacterDetailDto, ProficiencyDto } from '../../../types/character'
-import { useDeleteProficiencyMutation } from '../../../api/characterApi'
+import type { CharacterDetailDto } from '../../../types/character'
 
 interface ProficienciesSectionProps {
 	character: CharacterDetailDto
 	onAddProficiency: () => void
 }
 
-const GROUP_LABELS: Record<string, string> = {
-	weapon: 'Weapons',
-	armor: 'Armor',
-	tool: 'Tools',
-	language: 'Languages',
-	skill: 'Skills',
+function TagGroup({ title, items }: { title: string; items: string[] }) {
+	if (items.length === 0) return null
+	return (
+		<div className='ch-taggroup'>
+			<div className='ch-taggroup-head'>
+				<span className='ch-taggroup-title'>{title}</span>
+			</div>
+			<div className='ch-tags'>
+				{items.map((name, i) => (
+					<span key={i} className='ch-tag'>{name}</span>
+				))}
+			</div>
+		</div>
+	)
 }
 
-const GROUP_ORDER = ['weapon', 'armor', 'tool', 'language', 'skill']
-
 export const ProficienciesSection = ({ character, onAddProficiency }: ProficienciesSectionProps) => {
-	const [deleteProficiency] = useDeleteProficiencyMutation()
-
-	const groups: Record<string, ProficiencyDto[]> = {}
-	for (const prof of character.proficiencies) {
-		const key = prof.proficiencyType
-		if (!groups[key]) groups[key] = []
-		groups[key].push(prof)
-	}
-
-	const orderedKeys = [
-		...GROUP_ORDER.filter(k => groups[k]),
-		...Object.keys(groups).filter(k => !GROUP_ORDER.includes(k)),
-	]
+	const hasAny =
+		character.weapons.length > 0 ||
+		character.armors.length > 0 ||
+		character.languages.length > 0 ||
+		character.instruments.length > 0 ||
+		character.skillProficiencies.length > 0
 
 	return (
 		<div className='ch-sec'>
@@ -44,34 +42,15 @@ export const ProficienciesSection = ({ character, onAddProficiency }: Proficienc
 				</button>
 			</div>
 
-			{orderedKeys.length === 0 ? (
-				<div className='ch-empty'>No proficiencies added yet.</div>
+			{!hasAny ? (
+				<div className='ch-empty'>No proficiencies yet.</div>
 			) : (
 				<div className='ch-prof-body'>
-					{orderedKeys.map(key => (
-						<div key={key} className='ch-taggroup'>
-							<div className='ch-taggroup-head'>
-								<span className='ch-taggroup-title'>{GROUP_LABELS[key] ?? key}</span>
-							</div>
-							<div className='ch-tags'>
-								{groups[key].map(prof => (
-									<span key={prof.id} className={`ch-tag${prof.hasExpertise ? ' expert' : ''}`}>
-										{prof.name}
-										{prof.hasExpertise && <em title='Expertise'>★</em>}
-										<button
-											className='ch-tag-del'
-											onClick={() => deleteProficiency({ characterId: character.id, proficiencyId: prof.id })}
-											aria-label={`Remove ${prof.name}`}
-										>
-											<svg width='9' height='9' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2.8' strokeLinecap='round'>
-												<path d='M6 6 18 18M6 18 18 6' />
-											</svg>
-										</button>
-									</span>
-								))}
-							</div>
-						</div>
-					))}
+					<TagGroup title='Skills' items={character.skillProficiencies.map(s => s.hasExpertise ? `${s.skill} ★` : s.skill)} />
+					<TagGroup title='Weapons' items={character.weapons} />
+					<TagGroup title='Armor' items={character.armors} />
+					<TagGroup title='Languages' items={character.languages} />
+					<TagGroup title='Instruments' items={character.instruments} />
 				</div>
 			)}
 		</div>

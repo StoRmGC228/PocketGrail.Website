@@ -42,7 +42,7 @@ export const AlliesSection = ({ characterId }: AlliesSectionProps) => {
 								</div>
 								<div className='ch-party-info'>
 									<div className='ch-party-name'>{ally.characterName}</div>
-									<div className='ch-party-cls'>{ally.class} · Lv {ally.level}</div>
+									<div className='ch-party-cls'>{ally.classDisplay} · Lv {ally.level}</div>
 									<div className='ch-party-hp'>
 										<div className='ch-party-hp-bar'>
 											<div

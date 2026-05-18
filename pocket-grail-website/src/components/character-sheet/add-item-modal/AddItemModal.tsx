@@ -40,7 +40,7 @@ export const AddItemModal = ({ characterId, onClose }: AddItemModalProps) => {
 				cost: cost || undefined,
 				quantity: parseInt(quantity) || 1,
 				description: description || undefined,
-				tags: tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : undefined,
+				tags: tags || undefined,
 				isWeapon,
 				isMagical,
 				isEquipped,
@@ -48,7 +48,7 @@ export const AddItemModal = ({ characterId, onClose }: AddItemModalProps) => {
 				atkMod: isWeapon ? atkMod || undefined : undefined,
 				damage: isWeapon ? damage || undefined : undefined,
 				damageType: isWeapon ? damageType || undefined : undefined,
-				weaponProperties: isWeapon && weaponProperties ? weaponProperties.split(',').map(p => p.trim()).filter(Boolean) : undefined,
+				weaponProperties: isWeapon && weaponProperties ? weaponProperties : undefined,
 			}).unwrap()
 			onClose()
 		} catch {

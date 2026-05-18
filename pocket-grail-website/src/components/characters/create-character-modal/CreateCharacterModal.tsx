@@ -19,14 +19,33 @@ interface CreateCharacterModalProps {
 	onClose: () => void
 }
 
+const defaultForm = (): CreateCharacterFormValues => ({
+	name: '',
+	race: '',
+	className: '',
+	campaignId: undefined,
+	strScore: 10,
+	dexScore: 10,
+	conScore: 10,
+	intScore: 10,
+	wisScore: 10,
+	chaScore: 10,
+	flexStrBonus: 0,
+	flexDexBonus: 0,
+	flexConBonus: 0,
+	flexIntBonus: 0,
+	flexWisBonus: 0,
+	flexChaBonus: 0,
+	startingItemIds: [],
+	skillChoices: [],
+	weaponChoices: [],
+	armorChoices: [],
+	languageChoices: [],
+	instrumentChoices: [],
+})
+
 export const CreateCharacterModal = ({ onClose }: CreateCharacterModalProps) => {
-	const [form, setForm] = useState<CreateCharacterFormValues>({
-		name: '',
-		race: '',
-		class: '',
-		level: 1,
-		campaignId: undefined,
-	})
+	const [form, setForm] = useState<CreateCharacterFormValues>(defaultForm)
 	const [error, setError] = useState('')
 
 	const { data: campaigns } = useGetMyCampaignsQuery()
@@ -36,7 +55,7 @@ export const CreateCharacterModal = ({ onClose }: CreateCharacterModalProps) => 
 		e.preventDefault()
 		if (!form.name.trim()) { setError('Name is required.'); return }
 		if (!form.race) { setError('Race is required.'); return }
-		if (!form.class) { setError('Class is required.'); return }
+		if (!form.className) { setError('Class is required.'); return }
 
 		try {
 			await createCharacter(form).unwrap()
@@ -87,36 +106,24 @@ export const CreateCharacterModal = ({ onClose }: CreateCharacterModalProps) => 
 						</div>
 						<div className="rst-field">
 							<label>Class</label>
-							<select value={form.class} onChange={e => set('class', e.target.value)}>
+							<select value={form.className} onChange={e => set('className', e.target.value)}>
 								<option value="" disabled>Choose class…</option>
 								{CLASSES.map(c => <option key={c}>{c}</option>)}
 							</select>
 						</div>
 					</div>
 
-					<div className="rst-field-row">
-						<div className="rst-field">
-							<label>Starting Level</label>
-							<input
-								type="number"
-								min={1}
-								max={20}
-								value={form.level}
-								onChange={e => set('level', Number(e.target.value))}
-							/>
-						</div>
-						<div className="rst-field">
-							<label>Campaign (optional)</label>
-							<select
-								value={form.campaignId ?? ''}
-								onChange={e => set('campaignId', e.target.value ? Number(e.target.value) : undefined)}
-							>
-								<option value="">— Unassigned —</option>
-								{campaigns?.map(c => (
-									<option key={c.id} value={c.id}>{c.name}</option>
-								))}
-							</select>
-						</div>
+					<div className="rst-field">
+						<label>Campaign (optional)</label>
+						<select
+							value={form.campaignId ?? ''}
+							onChange={e => set('campaignId', e.target.value ? Number(e.target.value) : undefined)}
+						>
+							<option value="">— Unassigned —</option>
+							{campaigns?.map(c => (
+								<option key={c.id} value={c.id}>{c.name}</option>
+							))}
+						</select>
 					</div>
 
 					<div className="rst-modal-actions">

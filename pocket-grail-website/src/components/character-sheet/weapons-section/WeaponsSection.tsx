@@ -65,10 +65,10 @@ export const WeaponsSection = ({ character, onAddItem }: WeaponsSectionProps) =>
 									</div>
 								)}
 							</div>
-							{weapon.weaponProperties && weapon.weaponProperties.length > 0 && (
+							{weapon.weaponProperties && (
 								<div className='ch-weapon-props'>
-									{weapon.weaponProperties.map((prop, i) => (
-										<span key={i} className='ch-weapon-prop'>{prop}</span>
+									{weapon.weaponProperties.split(',').filter(Boolean).map((prop, i) => (
+										<span key={i} className='ch-weapon-prop'>{prop.trim()}</span>
 									))}
 								</div>
 							)}

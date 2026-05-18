@@ -86,10 +86,10 @@ function ItemRow({
 							{item.cost && <span className='ch-item-detail'>{item.cost}</span>}
 							{item.isAttuned && <span className='ch-attuned-badge'>Attuned</span>}
 						</div>
-						{item.tags && item.tags.length > 0 && (
+						{item.tags && (
 							<div className='ch-item-tags'>
-								{item.tags.map((tag, i) => (
-									<span key={i} className='ch-item-tag'>{tag}</span>
+								{item.tags.split(',').filter(Boolean).map((tag, i) => (
+									<span key={i} className='ch-item-tag'>{tag.trim()}</span>
 								))}
 							</div>
 						)}

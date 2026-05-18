@@ -35,7 +35,7 @@ export const CharacterCard = ({ character, delMode, onClick, onDelete }: Charact
 	const isDowned = character.currentHp === 0 && character.maxHp > 0
 	const artStyle = character.imageUrl
 		? { backgroundImage: `url(${character.imageUrl})`, backgroundSize: 'cover' as const, backgroundPosition: 'center' }
-		: { background: getClassGradient(character.class) }
+		: { background: getClassGradient(character.classDisplay) }
 
 	const handleClick = (e: React.MouseEvent) => {
 		if (delMode) e.preventDefault()
@@ -71,7 +71,7 @@ export const CharacterCard = ({ character, delMode, onClick, onDelete }: Charact
 			<div className="rst-card-body">
 				<div className="rst-card-name">{character.name}</div>
 				<div className="rst-card-race">{character.race}</div>
-				<div className="rst-card-cls">{character.class}</div>
+				<div className="rst-card-cls">{character.classDisplay}</div>
 				<div className="rst-card-hp">
 					<div className="rst-card-hp-row">
 						<span className="rst-card-hp-lbl">{isDowned ? 'Downed' : 'Hit Points'}</span>

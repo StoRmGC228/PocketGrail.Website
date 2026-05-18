@@ -23,9 +23,7 @@ export const AddFeatureModal = ({ characterId, onClose }: AddFeatureModalProps) 
 			await addFeature({
 				id: characterId,
 				name: name.trim(),
-				featureType,
 				description: description || undefined,
-				featureLevel: featureLevel ? parseInt(featureLevel) : undefined,
 			}).unwrap()
 			onClose()
 		} catch {

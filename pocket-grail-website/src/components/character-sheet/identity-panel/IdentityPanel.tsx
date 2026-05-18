@@ -63,8 +63,7 @@ export const IdentityPanel = ({ character }: IdentityPanelProps) => {
 			<div className='ch-identity-head'>
 				<h1 className='ch-identity-name'>{character.name}</h1>
 				<div className='ch-identity-meta'>
-					{character.race} · {character.class}
-					{character.subclass ? ` (${character.subclass})` : ''}
+					{character.race} · {character.classDisplay}
 				</div>
 				<div className='ch-identity-row'>
 					<span className='ch-level-pill'>Level {character.level}</span>

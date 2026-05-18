@@ -50,14 +50,14 @@ export const DeleteCharacterModal = ({ character, onClose, onConfirm, isLoading 
 			<div className="rst-modal-target">
 				<div
 					className="rst-modal-target-art"
-					style={{ background: getClassGradient(character.class) }}
+					style={{ background: getClassGradient(character.classDisplay) }}
 				>
 					<span>{character.name[0]?.toUpperCase()}</span>
 				</div>
 				<div className="rst-modal-target-info">
 					<div className="rst-modal-target-name">{character.name}</div>
 					<div className="rst-modal-target-meta">
-						{character.race} · {character.class} · Lv {character.level}
+						{character.race} · {character.classDisplay} · Lv {character.level}
 					</div>
 				</div>
 			</div>

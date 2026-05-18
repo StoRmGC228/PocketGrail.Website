@@ -44,7 +44,7 @@ export const CharacterPortrait = ({ character, onEditImage }: CharacterPortraitP
 					? `${(character.imageCropX! + character.imageCropWidth! / 2)}% ${(character.imageCropY! + character.imageCropHeight! / 2)}%`
 					: 'center',
 		  }
-		: { background: getClassGradient(character.class) }
+		: { background: getClassGradient(character.classDisplay) }
 
 	return (
 		<div className='ch-portrait'>
