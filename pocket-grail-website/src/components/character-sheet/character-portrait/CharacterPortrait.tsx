@@ -29,27 +29,20 @@ interface CharacterPortraitProps {
 
 export const CharacterPortrait = ({ character, onEditImage }: CharacterPortraitProps) => {
 	const hasImage = !!character.imageUrl
-	const hasCrop =
-		character.imageCropX !== undefined &&
-		character.imageCropY !== undefined &&
-		character.imageCropWidth !== undefined &&
-		character.imageCropHeight !== undefined
-
-	const imgStyle: React.CSSProperties = hasImage
-		? {
-				backgroundImage: `url(${character.imageUrl})`,
-				backgroundSize: 'cover',
-				objectFit: 'cover',
-				objectPosition: hasCrop
-					? `${(character.imageCropX! + character.imageCropWidth! / 2)}% ${(character.imageCropY! + character.imageCropHeight! / 2)}%`
-					: 'center',
-		  }
-		: { background: getClassGradient(character.classDisplay) }
 
 	return (
 		<div className='ch-portrait'>
-			<div className='ch-portrait-art' style={imgStyle}>
-				{!hasImage && (
+			<div
+				className={`ch-portrait-art${hasImage ? '' : ' ch-portrait-art--placeholder'}`}
+				style={hasImage ? undefined : { background: getClassGradient(character.classDisplay) }}
+			>
+				{hasImage ? (
+					<img
+						className='ch-portrait-img'
+						src={character.imageUrl!}
+						alt={character.name}
+					/>
+				) : (
 					<span className='ch-portrait-initial'>{character.name[0]?.toUpperCase()}</span>
 				)}
 				<div className='ch-portrait-scrim' />

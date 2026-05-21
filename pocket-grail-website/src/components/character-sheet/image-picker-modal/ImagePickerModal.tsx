@@ -103,48 +103,50 @@ export const ImagePickerModal = ({ characterId, onClose }: ImagePickerModalProps
 				{previewUrl && (
 					<div className='imgpick-preview-wrap'>
 						<p className='imgpick-hint'>Drag the frame to set the portrait crop area (7:9 ratio).</p>
-						<div className='imgpick-container' ref={containerRef}>
-							<img src={previewUrl} alt='Preview' className='imgpick-img' draggable={false} />
+						<div className='imgpick-container-outer'>
+							<div className='imgpick-container' ref={containerRef}>
+								<img src={previewUrl} alt='Preview' className='imgpick-img' draggable={false} />
 
-							{/* Dim overlay — four pieces around the crop rect */}
-							<div
-								className='imgpick-dim imgpick-dim-top'
-								style={{ height: `${crop.y}%` }}
-							/>
-							<div
-								className='imgpick-dim imgpick-dim-bottom'
-								style={{ height: `${100 - crop.y - crop.height}%` }}
-							/>
-							<div
-								className='imgpick-dim imgpick-dim-left'
-								style={{
-									top: `${crop.y}%`,
-									height: `${crop.height}%`,
-									width: `${crop.x}%`,
-								}}
-							/>
-							<div
-								className='imgpick-dim imgpick-dim-right'
-								style={{
-									top: `${crop.y}%`,
-									height: `${crop.height}%`,
-									width: `${100 - crop.x - crop.width}%`,
-								}}
-							/>
+								{/* Dim overlay — four pieces around the crop rect */}
+								<div
+									className='imgpick-dim imgpick-dim-top'
+									style={{ height: `${crop.y}%` }}
+								/>
+								<div
+									className='imgpick-dim imgpick-dim-bottom'
+									style={{ height: `${100 - crop.y - crop.height}%` }}
+								/>
+								<div
+									className='imgpick-dim imgpick-dim-left'
+									style={{
+										top: `${crop.y}%`,
+										height: `${crop.height}%`,
+										width: `${crop.x}%`,
+									}}
+								/>
+								<div
+									className='imgpick-dim imgpick-dim-right'
+									style={{
+										top: `${crop.y}%`,
+										height: `${crop.height}%`,
+										width: `${100 - crop.x - crop.width}%`,
+									}}
+								/>
 
-							{/* Draggable crop rect */}
-							<div
-								className='imgpick-crop'
-								style={{
-									left: `${crop.x}%`,
-									top: `${crop.y}%`,
-									width: `${crop.width}%`,
-									height: `${crop.height}%`,
-								}}
-								onPointerDown={onPointerDown}
-								onPointerMove={onPointerMove}
-								onPointerUp={onPointerUp}
-							/>
+								{/* Draggable crop rect */}
+								<div
+									className='imgpick-crop'
+									style={{
+										left: `${crop.x}%`,
+										top: `${crop.y}%`,
+										width: `${crop.width}%`,
+										height: `${crop.height}%`,
+									}}
+									onPointerDown={onPointerDown}
+									onPointerMove={onPointerMove}
+									onPointerUp={onPointerUp}
+								/>
+							</div>
 						</div>
 					</div>
 				)}

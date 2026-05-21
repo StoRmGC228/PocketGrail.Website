@@ -1,20 +1,36 @@
 .ch-portrait {
 	position: relative;
 	border-radius: 14px;
-	overflow: hidden;
+
 	border: 1px solid var(--border-2);
 	background: var(--bg-2);
 }
 
 .ch-portrait-art {
-	aspect-ratio: 7 / 9;
 	width: 100%;
+	display: block;
+	position: relative;
+	aspect-ratio: 7 / 9;
+	overflow: hidden;
+	border-top-left-radius: 14px;
+	border-top-right-radius: 14px;
+}
+
+.ch-portrait-art--placeholder {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	position: relative;
 	background-size: cover;
 	background-position: center;
+}
+
+.ch-portrait-img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
 }
 
 .ch-portrait-initial {
@@ -30,7 +46,11 @@
 .ch-portrait-scrim {
 	position: absolute;
 	inset: 0;
-	background: linear-gradient(180deg, transparent 50%, rgba(6, 4, 13, 0.85) 100%);
+	background: linear-gradient(
+		180deg,
+		transparent 50%,
+		rgba(6, 4, 13, 0.85) 100%
+	);
 	pointer-events: none;
 }
 
