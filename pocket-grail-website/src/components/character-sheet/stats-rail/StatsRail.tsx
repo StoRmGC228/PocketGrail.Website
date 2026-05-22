@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './StatsRail.css'
 import type { CharacterDetailDto } from '../../../types/character'
 import { getAbilityMod, getProfBonus } from '../../../types/character'
-import { useUpdateStatsMutation } from '../../../api/characterApi'
+import { useUpdateStatsMutation, useAddProficiencyMutation, useDeleteProficiencyMutation } from '../../../api/characterApi'
 
 type AbilityScoreKey = 'strScore' | 'dexScore' | 'conScore' | 'intScore' | 'wisScore' | 'chaScore'
 
@@ -79,6 +79,8 @@ interface StatsRailProps {
 
 export const StatsRail = ({ character }: StatsRailProps) => {
 	const [updateStats] = useUpdateStatsMutation()
+	const [addProficiency] = useAddProficiencyMutation()
+	const [deleteProficiency] = useDeleteProficiencyMutation()
 
 	const profBonus = getProfBonus(character.level)
 
@@ -119,11 +121,23 @@ export const StatsRail = ({ character }: StatsRailProps) => {
 		if (prof.hasExpertise) skillExpertMap[prof.skill] = true
 	}
 
-	const getSkillMod = (abilityScore: number, skillKey: string): number => {
+	const getSkillMod = (abilityScore: number, skillName: string): number => {
 		const base = getAbilityMod(abilityScore)
-		if (skillExpertMap[skillKey]) return base + profBonus * 2
-		if (skillProfMap[skillKey]) return base + profBonus
+		if (skillExpertMap[skillName]) return base + profBonus * 2
+		if (skillProfMap[skillName]) return base + profBonus
 		return base
+	}
+
+	const handleSkillClick = async (skillName: string) => {
+		const prof = character.skillProficiencies.find(p => p.skill === skillName)
+		if (!prof) {
+			addProficiency({ id: character.id, name: skillName, proficiencyType: 'skill', hasExpertise: false })
+		} else if (!prof.hasExpertise) {
+			await deleteProficiency({ characterId: character.id, proficiencyId: prof.id })
+			addProficiency({ id: character.id, name: skillName, proficiencyType: 'skill', hasExpertise: true })
+		} else {
+			deleteProficiency({ characterId: character.id, proficiencyId: prof.id })
+		}
 	}
 
 	return (
@@ -131,7 +145,6 @@ export const StatsRail = ({ character }: StatsRailProps) => {
 			{ABILITIES.map(ability => {
 				const score = scores[ability.key]
 				const mod = getAbilityMod(score)
-				const saveMod = mod + profBonus
 				const isEditingThis = editing === ability.key
 
 				return (
@@ -162,20 +175,29 @@ export const StatsRail = ({ character }: StatsRailProps) => {
 						</div>
 
 						{/* Saving throw */}
-						<div className='ch-save-row'>
-							<div className='ch-prof-dot filled' />
-							<span className='ch-save-lbl'>Save</span>
-							<span className='ch-save-mod'>{saveMod >= 0 ? '+' : ''}{saveMod}</span>
-						</div>
+						{(() => {
+							const isSaveProficient = character.savingThrows.includes(ability.label)
+							const saveModVal = mod + (isSaveProficient ? profBonus : 0)
+							return (
+								<div className='ch-save-row'>
+									<div className={`ch-prof-dot${isSaveProficient ? ' filled' : ''}`} />
+									<span className='ch-save-lbl'>Save</span>
+									<span className='ch-save-mod'>{saveModVal >= 0 ? '+' : ''}{saveModVal}</span>
+								</div>
+							)
+						})()}
 
 						{/* Skills */}
 						{ability.skills.map(skill => {
-							const skillMod = getSkillMod(score, skill.key)
-							const isProficient = !!skillProfMap[skill.key]
-							const isExpert = !!skillExpertMap[skill.key]
+							const isProficient = !!skillProfMap[skill.name]
+							const isExpert = !!skillExpertMap[skill.name]
+							const skillMod = getSkillMod(score, skill.name)
 							return (
 								<div key={skill.key} className='ch-skill-row'>
-									<div className={`ch-prof-dot${isExpert ? ' expert' : isProficient ? ' filled' : ''}`} />
+									<div
+										className={`ch-prof-dot clickable${isExpert ? ' expert' : isProficient ? ' filled' : ''}`}
+										onClick={() => handleSkillClick(skill.name)}
+									/>
 									<span className='ch-skill-name'>{skill.name}</span>
 									<span className='ch-save-mod'>{skillMod >= 0 ? '+' : ''}{skillMod}</span>
 								</div>

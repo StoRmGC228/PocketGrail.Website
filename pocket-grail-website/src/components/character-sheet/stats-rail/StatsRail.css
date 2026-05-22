@@ -104,13 +104,22 @@
 }
 
 .ch-prof-dot.filled {
-	background: var(--accent);
-	border-color: var(--accent);
+	background: var(--gold);
+	border-color: var(--gold);
 }
 
 .ch-prof-dot.expert {
-	background: var(--gold);
-	border-color: var(--gold);
+	background: var(--danger);
+	border-color: var(--danger);
+}
+
+.ch-prof-dot.clickable {
+	cursor: pointer;
+	transition: opacity 0.15s;
+}
+
+.ch-prof-dot.clickable:hover {
+	opacity: 0.7;
 }
 
 .ch-save-lbl {
