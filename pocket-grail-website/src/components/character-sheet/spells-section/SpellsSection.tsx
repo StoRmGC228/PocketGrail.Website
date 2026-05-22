@@ -98,12 +98,14 @@ function SpellLevelGroup({
 									</svg>
 								</button>
 							</div>
-							<div className='ch-spell-meta'>
-								{spell.school && <span>{spell.school}</span>}
-								{spell.range && <span>{spell.range}</span>}
-								{spell.castingTime && <span>{spell.castingTime}</span>}
-								{spell.components && <span>{spell.components}</span>}
-							</div>
+							{(spell.school || spell.range || spell.castingTime || spell.components) && (
+								<div className='ch-spell-meta'>
+									{spell.school && <span>{spell.school}</span>}
+									{spell.range && <span>{spell.range}</span>}
+									{spell.castingTime && <span>{spell.castingTime}</span>}
+									{spell.components && <span>{spell.components}</span>}
+								</div>
+							)}
 						</div>
 					))}
 				</div>

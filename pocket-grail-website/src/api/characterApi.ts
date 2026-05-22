@@ -19,7 +19,10 @@ import type {
 	LevelUpResponse,
 	SetSubclassRequest,
 	UpdateCharacterClassRequest,
+	CatalogItemDto,
+	CatalogSpellDto,
 	ItemDto,
+	SpellDto,
 	FeatDto,
 	FeatureDto,
 	ProficiencyDto,
@@ -35,6 +38,16 @@ export const characterApi = createApi({
 	}),
 	tagTypes: ['Character', 'CharacterSheet'],
 	endpoints: builder => ({
+		getItems: builder.query<CatalogItemDto[], void>({
+			query: () => 'Items',
+		}),
+		getSpells: builder.query<CatalogSpellDto[], void>({
+			query: () => 'Spells',
+		}),
+		addItemFromCatalog: builder.mutation<ItemDto, { characterId: number; itemId: number }>({
+			query: ({ characterId, itemId }) => ({ url: `Characters/${characterId}/items/catalog`, method: 'POST', body: { itemId } }),
+			invalidatesTags: ['CharacterSheet'],
+		}),
 		getMyCharacters: builder.query<CharacterDto[], void>({
 			query: () => 'Characters/mine',
 			providesTags: ['Character'],
@@ -137,6 +150,10 @@ export const characterApi = createApi({
 			query: ({ characterId, itemId }) => ({ url: `Characters/${characterId}/items/${itemId}`, method: 'DELETE' }),
 			invalidatesTags: ['CharacterSheet'],
 		}),
+		addSpellFromCatalog: builder.mutation<SpellDto, { characterId: number; spellId: number }>({
+			query: ({ characterId, spellId }) => ({ url: `Characters/${characterId}/spells/catalog`, method: 'POST', body: { spellId } }),
+			invalidatesTags: ['CharacterSheet'],
+		}),
 		addSpell: builder.mutation<CharacterDetailDto, { id: number } & AddSpellRequest>({
 			query: ({ id, ...body }) => ({ url: `Characters/${id}/spells`, method: 'POST', body }),
 			invalidatesTags: ['CharacterSheet'],
@@ -205,6 +222,10 @@ export const characterApi = createApi({
 })
 
 export const {
+	useGetItemsQuery,
+	useGetSpellsQuery,
+	useAddItemFromCatalogMutation,
+	useAddSpellFromCatalogMutation,
 	useGetMyCharactersQuery,
 	useGetCharacterByIdQuery,
 	useGetCharacterDetailQuery,
