@@ -65,7 +65,7 @@ export const CharacterCard = ({ character, delMode, onClick, onDelete }: Charact
 			<div className="rst-card-art" style={artStyle}>
 				{!character.imageUrl && <div className="rst-card-art-grain" />}
 				<div className="rst-card-art-scrim" />
-				<div className="rst-card-art-initial">{character.name[0]?.toUpperCase()}</div>
+				{!character.imageUrl && <div className="rst-card-art-initial">{character.name[0]?.toUpperCase()}</div>}
 				<div className="rst-card-art-lvbadge">Lv<b>{character.level}</b></div>
 			</div>
 			<div className="rst-card-body">

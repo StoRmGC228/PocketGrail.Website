@@ -2,6 +2,7 @@ import './CreateCharacterModal.css'
 import { useState, useRef, useCallback } from 'react'
 import { useGetMyCampaignsQuery } from '../../../api/campaignApi'
 import { useCreateCharacterMutation, useUpdateCharacterImageMutation } from '../../../api/characterApi'
+import { cropImageToFile, PORTRAIT_RATIO } from '../../../utils/cropImage'
 import { useGetRacesQuery } from '../../../api/raceApi'
 import { useGetClassesQuery, useGetStartingItemsQuery } from '../../../api/classApi'
 import type { CreateCharacterFormValues } from '../../../types/character'
@@ -13,7 +14,7 @@ type FlexBonuses = Pick<CreateCharacterFormValues,
 	'flexStrBonus' | 'flexDexBonus' | 'flexConBonus' | 'flexIntBonus' | 'flexWisBonus' | 'flexChaBonus'>
 
 interface CropRect { x: number; y: number; width: number; height: number }
-const TARGET_RATIO = 7 / 9
+const TARGET_RATIO = PORTRAIT_RATIO
 
 interface CreateCharacterModalProps {
 	onClose: () => void
@@ -27,7 +28,6 @@ const defaultForm = (): CreateCharacterFormValues => ({
 	subclassId: undefined,
 	campaignId: undefined,
 	image: null,
-	imageCrop: null,
 	strScore: 10, dexScore: 10, conScore: 10, intScore: 10, wisScore: 10, chaScore: 10,
 	flexStrBonus: 0, flexDexBonus: 0, flexConBonus: 0, flexIntBonus: 0, flexWisBonus: 0, flexChaBonus: 0,
 	startingItemIds: [],
@@ -44,7 +44,7 @@ export const CreateCharacterModal = ({ onClose }: CreateCharacterModalProps) => 
 	// Image crop state
 	const [imageFile, setImageFile] = useState<File | null>(null)
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-	const [crop, setCrop] = useState<CropRect>({ x: 25, y: 0, width: 50, height: 50 / TARGET_RATIO })
+	const [crop, setCrop] = useState<CropRect>({ x: 10, y: 0, width: 80, height: 80 / TARGET_RATIO })
 	const containerRef = useRef<HTMLDivElement>(null)
 	const dragging = useRef(false)
 	const dragStart = useRef({ mx: 0, my: 0, cx: 0, cy: 0 })
@@ -69,9 +69,17 @@ export const CreateCharacterModal = ({ onClose }: CreateCharacterModalProps) => 
 		const f = e.target.files?.[0]
 		if (!f) return
 		setImageFile(f)
-		setPreviewUrl(URL.createObjectURL(f))
-		const w = 50
-		setCrop({ x: (100 - w) / 2, y: (100 - w / TARGET_RATIO) / 2, width: w, height: w / TARGET_RATIO })
+		const url = URL.createObjectURL(f)
+		setPreviewUrl(url)
+		const probe = new Image()
+		probe.onload = () => {
+			const aspect = probe.naturalWidth / probe.naturalHeight
+			let w = 80
+			let h = w * aspect / TARGET_RATIO
+			if (h > 100) { h = 100; w = h * TARGET_RATIO / aspect }
+			setCrop({ x: (100 - w) / 2, y: (100 - h) / 2, width: w, height: h })
+		}
+		probe.src = url
 	}
 
 	const onPointerDown = useCallback((e: React.PointerEvent) => {
@@ -100,14 +108,8 @@ export const CreateCharacterModal = ({ onClose }: CreateCharacterModalProps) => 
 		try {
 			const char = await createCharacter({ ...finalForm, image: null }).unwrap()
 			if (imageFile) {
-				await updateCharacterImage({
-					id: char.id,
-					image: imageFile,
-					cropX: Math.round(crop.x),
-					cropY: Math.round(crop.y),
-					cropWidth: Math.round(crop.width),
-					cropHeight: Math.round(crop.height),
-				}).unwrap()
+				const cropped = await cropImageToFile(imageFile, crop)
+				await updateCharacterImage({ id: char.id, image: cropped }).unwrap()
 			}
 			onClose()
 		} catch {
@@ -286,7 +288,7 @@ export const CreateCharacterModal = ({ onClose }: CreateCharacterModalProps) => 
 
 					{previewUrl && (
 						<div className="ccm-img-preview-wrap">
-							<span className="ccm-img-hint">Drag the frame to crop your portrait (7:9 ratio).</span>
+							<span className="ccm-img-hint">Drag the frame to crop your portrait (9:11 ratio).</span>
 							<div className="ccm-img-container" ref={containerRef}>
 								<img src={previewUrl} alt="Preview" className="ccm-img" draggable={false} />
 								<div className="ccm-img-dim ccm-img-dim-top" style={{ height: `${crop.y}%` }} />

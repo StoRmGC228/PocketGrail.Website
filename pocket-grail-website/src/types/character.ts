@@ -8,6 +8,7 @@ export interface CharacterClassDto {
 }
 
 export interface SkillProficiencyDto {
+	id: number
 	skill: string
 	hasExpertise: boolean
 }
@@ -85,10 +86,6 @@ export interface AllyDto {
 	currentHp: number
 	maxHp: number
 	imageUrl?: string
-	imageCropX?: number
-	imageCropY?: number
-	imageCropWidth?: number
-	imageCropHeight?: number
 	userId: number
 	username: string
 }
@@ -106,10 +103,6 @@ export interface CharacterDetailDto {
 	tempHp: number
 	usedHitDice: number
 	imageUrl?: string
-	imageCropX?: number
-	imageCropY?: number
-	imageCropWidth?: number
-	imageCropHeight?: number
 	strScore: number
 	dexScore: number
 	conScore: number
@@ -367,7 +360,6 @@ export interface CreateCharacterFormValues {
 	subclassId?: number
 	campaignId?: number
 	image?: File | null
-	imageCrop?: { x: number; y: number; width: number; height: number } | null
 	strScore: number
 	dexScore: number
 	conScore: number

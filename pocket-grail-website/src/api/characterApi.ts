@@ -117,14 +117,10 @@ export const characterApi = createApi({
 			query: ({ id, ...body }) => ({ url: `Characters/${id}/wallet`, method: 'PUT', body }),
 			invalidatesTags: ['CharacterSheet'],
 		}),
-		updateCharacterImage: builder.mutation<CharacterDetailDto, { id: number; image: File; cropX: number; cropY: number; cropWidth: number; cropHeight: number }>({
-			query: ({ id, image, cropX, cropY, cropWidth, cropHeight }) => {
+		updateCharacterImage: builder.mutation<CharacterDetailDto, { id: number; image: File }>({
+			query: ({ id, image }) => {
 				const body = new FormData()
 				body.append('image', image)
-				body.append('cropX', String(cropX))
-				body.append('cropY', String(cropY))
-				body.append('cropWidth', String(cropWidth))
-				body.append('cropHeight', String(cropHeight))
 				return { url: `Characters/${id}/image`, method: 'PUT', body }
 			},
 			invalidatesTags: ['CharacterSheet'],

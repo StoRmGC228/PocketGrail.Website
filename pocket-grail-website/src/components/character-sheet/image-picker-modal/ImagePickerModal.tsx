@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from 'react'
 import './ImagePickerModal.css'
 import { useUpdateCharacterImageMutation } from '../../../api/characterApi'
+import { cropImageToFile, PORTRAIT_RATIO } from '../../../utils/cropImage'
 
 interface ImagePickerModalProps {
 	characterId: number
@@ -14,14 +15,14 @@ interface CropRect {
 	height: number
 }
 
-const TARGET_RATIO = 7 / 9
+const TARGET_RATIO = PORTRAIT_RATIO
 
 export const ImagePickerModal = ({ characterId, onClose }: ImagePickerModalProps) => {
 	const [updateImage, { isLoading }] = useUpdateCharacterImageMutation()
 
 	const [file, setFile] = useState<File | null>(null)
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-	const [crop, setCrop] = useState<CropRect>({ x: 0, y: 0, width: 50, height: 50 / TARGET_RATIO })
+	const [crop, setCrop] = useState<CropRect>({ x: 0, y: 0, width: 80, height: 80 / TARGET_RATIO })
 	const [error, setError] = useState('')
 
 	const containerRef = useRef<HTMLDivElement>(null)
@@ -34,10 +35,15 @@ export const ImagePickerModal = ({ characterId, onClose }: ImagePickerModalProps
 		setFile(f)
 		const url = URL.createObjectURL(f)
 		setPreviewUrl(url)
-		// Reset crop to center 7:9 box
-		const w = 50
-		const h = w / TARGET_RATIO
-		setCrop({ x: (100 - w) / 2, y: (100 - h) / 2, width: w, height: h })
+		const probe = new Image()
+		probe.onload = () => {
+			const aspect = probe.naturalWidth / probe.naturalHeight
+			let w = 80
+			let h = w * aspect / TARGET_RATIO
+			if (h > 100) { h = 100; w = h * TARGET_RATIO / aspect }
+			setCrop({ x: (100 - w) / 2, y: (100 - h) / 2, width: w, height: h })
+		}
+		probe.src = url
 	}
 
 	const onPointerDown = useCallback((e: React.PointerEvent) => {
@@ -63,14 +69,8 @@ export const ImagePickerModal = ({ characterId, onClose }: ImagePickerModalProps
 	const handleSubmit = async () => {
 		if (!file) { setError('Please select an image.'); return }
 		try {
-			await updateImage({
-				id: characterId,
-				image: file,
-				cropX: Math.round(crop.x),
-				cropY: Math.round(crop.y),
-				cropWidth: Math.round(crop.width),
-				cropHeight: Math.round(crop.height),
-			}).unwrap()
+			const cropped = await cropImageToFile(file, crop)
+			await updateImage({ id: characterId, image: cropped }).unwrap()
 			onClose()
 		} catch {
 			setError('Failed to upload image. Please try again.')
@@ -102,49 +102,51 @@ export const ImagePickerModal = ({ characterId, onClose }: ImagePickerModalProps
 
 				{previewUrl && (
 					<div className='imgpick-preview-wrap'>
-						<p className='imgpick-hint'>Drag the frame to set the portrait crop area (7:9 ratio).</p>
-						<div className='imgpick-container' ref={containerRef}>
-							<img src={previewUrl} alt='Preview' className='imgpick-img' draggable={false} />
+						<p className='imgpick-hint'>Drag the frame to set the portrait crop area (9:11 ratio).</p>
+						<div className='imgpick-container-outer'>
+							<div className='imgpick-container' ref={containerRef}>
+								<img src={previewUrl} alt='Preview' className='imgpick-img' draggable={false} />
 
-							{/* Dim overlay — four pieces around the crop rect */}
-							<div
-								className='imgpick-dim imgpick-dim-top'
-								style={{ height: `${crop.y}%` }}
-							/>
-							<div
-								className='imgpick-dim imgpick-dim-bottom'
-								style={{ height: `${100 - crop.y - crop.height}%` }}
-							/>
-							<div
-								className='imgpick-dim imgpick-dim-left'
-								style={{
-									top: `${crop.y}%`,
-									height: `${crop.height}%`,
-									width: `${crop.x}%`,
-								}}
-							/>
-							<div
-								className='imgpick-dim imgpick-dim-right'
-								style={{
-									top: `${crop.y}%`,
-									height: `${crop.height}%`,
-									width: `${100 - crop.x - crop.width}%`,
-								}}
-							/>
+								{/* Dim overlay — four pieces around the crop rect */}
+								<div
+									className='imgpick-dim imgpick-dim-top'
+									style={{ height: `${crop.y}%` }}
+								/>
+								<div
+									className='imgpick-dim imgpick-dim-bottom'
+									style={{ height: `${100 - crop.y - crop.height}%` }}
+								/>
+								<div
+									className='imgpick-dim imgpick-dim-left'
+									style={{
+										top: `${crop.y}%`,
+										height: `${crop.height}%`,
+										width: `${crop.x}%`,
+									}}
+								/>
+								<div
+									className='imgpick-dim imgpick-dim-right'
+									style={{
+										top: `${crop.y}%`,
+										height: `${crop.height}%`,
+										width: `${100 - crop.x - crop.width}%`,
+									}}
+								/>
 
-							{/* Draggable crop rect */}
-							<div
-								className='imgpick-crop'
-								style={{
-									left: `${crop.x}%`,
-									top: `${crop.y}%`,
-									width: `${crop.width}%`,
-									height: `${crop.height}%`,
-								}}
-								onPointerDown={onPointerDown}
-								onPointerMove={onPointerMove}
-								onPointerUp={onPointerUp}
-							/>
+								{/* Draggable crop rect */}
+								<div
+									className='imgpick-crop'
+									style={{
+										left: `${crop.x}%`,
+										top: `${crop.y}%`,
+										width: `${crop.width}%`,
+										height: `${crop.height}%`,
+									}}
+									onPointerDown={onPointerDown}
+									onPointerMove={onPointerMove}
+									onPointerUp={onPointerUp}
+								/>
+							</div>
 						</div>
 					</div>
 				)}
