@@ -80,22 +80,53 @@ function ItemRow({
 			{open && (
 				<div className='ch-item-body'>
 					{item.description && <p className='ch-item-desc'>{item.description}</p>}
-					<div className='ch-item-foot'>
-						<div className='ch-item-details'>
-							{item.weight && <span className='ch-item-detail'>{item.weight} lb</span>}
-							{item.cost && <span className='ch-item-detail'>{item.cost}</span>}
-							{item.isAttuned && <span className='ch-attuned-badge'>Attuned</span>}
+
+					<div className='ch-item-actions'>
+						{/* Quantity control */}
+						<div className='ch-item-qty-ctrl'>
+							<button
+								className='ch-item-qty-btn'
+								onClick={e => {
+									e.stopPropagation()
+									if (item.quantity > 1)
+										updateItem({ characterId, itemId: item.id, quantity: item.quantity - 1 })
+								}}
+								disabled={item.quantity <= 1}
+								aria-label='Decrease quantity'
+							>
+								−
+							</button>
+							<span className='ch-item-qty-val'>{item.quantity}</span>
+							<button
+								className='ch-item-qty-btn'
+								onClick={e => {
+									e.stopPropagation()
+									updateItem({ characterId, itemId: item.id, quantity: item.quantity + 1 })
+								}}
+								aria-label='Increase quantity'
+							>
+								+
+							</button>
 						</div>
-						{item.tags && (
-							<div className='ch-item-tags'>
-								{item.tags.split(',').filter(Boolean).map((tag, i) => (
-									<span key={i} className='ch-item-tag'>{tag.trim()}</span>
-								))}
-							</div>
-						)}
+
+						{/* Attune toggle */}
 						<button
-							className='ch-del-btn'
-							onClick={() => deleteItem({ characterId, itemId: item.id })}
+							className={`ch-attune-btn${item.isAttuned ? ' active' : ''}`}
+							onClick={e => {
+								e.stopPropagation()
+								updateItem({ characterId, itemId: item.id, isAttuned: !item.isAttuned })
+							}}
+						>
+							{item.isAttuned ? 'Attuned' : 'Attune'}
+						</button>
+
+						{/* Delete */}
+						<button
+							className='ch-del-btn ch-del-btn--right'
+							onClick={e => {
+								e.stopPropagation()
+								deleteItem({ characterId, itemId: item.id })
+							}}
 							aria-label={`Delete ${item.name}`}
 						>
 							<svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2.4' strokeLinecap='round'>
@@ -103,6 +134,22 @@ function ItemRow({
 							</svg>
 						</button>
 					</div>
+
+					{(item.weight != null || item.cost || item.tags) && (
+						<div className='ch-item-foot'>
+							<div className='ch-item-details'>
+								{item.weight != null && <span className='ch-item-detail'>{item.weight} lb</span>}
+								{item.cost && <span className='ch-item-detail'>{item.cost}</span>}
+							</div>
+							{item.tags && (
+								<div className='ch-item-tags'>
+									{item.tags.split(',').filter(Boolean).map((tag, i) => (
+										<span key={i} className='ch-item-tag'>{tag.trim()}</span>
+									))}
+								</div>
+							)}
+						</div>
+					)}
 				</div>
 			)}
 		</div>

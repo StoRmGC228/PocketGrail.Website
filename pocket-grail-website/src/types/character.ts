@@ -5,12 +5,30 @@ export interface CharacterClassDto {
 	hitDice: string
 	subclass?: string
 	totalHitDice: number
+	spellAbility?: string
 }
 
 export interface SkillProficiencyDto {
 	id: number
 	skill: string
 	hasExpertise: boolean
+}
+
+export interface CatalogItemDto {
+	id: number
+	name: string
+	description?: string
+	rarity?: string
+	category?: string
+	weight?: number
+	cost?: string
+	isWeapon: boolean
+	isMagical: boolean
+	atkMod?: string
+	damage?: string
+	damageType?: string
+	weaponProperties?: string
+	tags?: string
 }
 
 export interface ItemDto {
@@ -33,6 +51,18 @@ export interface ItemDto {
 	isEquipped: boolean
 	isAttuned: boolean
 	quantity: number
+}
+
+export interface CatalogSpellDto {
+	id: number
+	name: string
+	level: number
+	school?: string
+	range?: string
+	castingTime?: string
+	concentration: boolean
+	isRitual: boolean
+	components?: string
 }
 
 export interface SpellDto {

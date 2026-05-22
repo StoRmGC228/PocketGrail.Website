@@ -23,25 +23,51 @@ import { AddFeatureModal } from '../../../components/character-sheet/add-feature
 import { AddProficiencyModal } from '../../../components/character-sheet/add-proficiency-modal/AddProficiencyModal'
 import { ImagePickerModal } from '../../../components/character-sheet/image-picker-modal/ImagePickerModal'
 
-type ModalType = 'addItem' | 'addSpell' | 'addFeat' | 'addFeature' | 'addProficiency' | 'imagePicker' | null
+type ModalType =
+	| 'addItem'
+	| 'addSpell'
+	| 'addFeat'
+	| 'addFeature'
+	| 'addProficiency'
+	| 'imagePicker'
+	| null
 
-const TABS = ['Identity', 'Stats', 'Combat', 'Spells', 'Inventory', 'Features', 'Notes'] as const
-type Tab = typeof TABS[number]
+const ALL_TABS = [
+	'Identity',
+	'Stats',
+	'Combat',
+	'Spells',
+	'Inventory',
+	'Features',
+	'Notes',
+] as const
+type Tab = (typeof ALL_TABS)[number]
 
 export const CharacterPage = () => {
 	const { id } = useParams<{ id: string }>()
 	const characterId = Number(id)
 	const navigate = useNavigate()
 
-	const { data: character, isLoading, isError } = useGetCharacterDetailQuery(characterId)
+	const {
+		data: character,
+		isLoading,
+		isError,
+	} = useGetCharacterDetailQuery(characterId)
 	const [updateCharacter] = useUpdateCharacterMutation()
 
 	const [activeModal, setActiveModal] = useState<ModalType>(null)
 	const [activeTab, setActiveTab] = useState<Tab>('Identity')
 
+	const isSpellcaster = character?.classes.some(c => c.spellAbility) ?? false
+	const tabs = ALL_TABS.filter(tab => tab !== 'Spells' || isSpellcaster)
+
 	const closeModal = () => setActiveModal(null)
 
-	const handleSaveText = async (patch: { backgroundStory?: string; appearance?: string; notes?: string }) => {
+	const handleSaveText = async (patch: {
+		backgroundStory?: string
+		appearance?: string
+		notes?: string
+	}) => {
 		if (!character) return
 		await updateCharacter({
 			id: character.id,
@@ -61,7 +87,9 @@ export const CharacterPage = () => {
 		return (
 			<div className='ch-page-error'>
 				<span>Failed to load character. </span>
-				<button onClick={() => navigate('/characters')}>Back to characters</button>
+				<button onClick={() => navigate('/characters')}>
+					Back to characters
+				</button>
 			</div>
 		)
 	}
@@ -70,7 +98,7 @@ export const CharacterPage = () => {
 		<div className='ch-page'>
 			{/* Mobile tab bar */}
 			<div className='ch-tabs'>
-				{TABS.map(tab => (
+				{tabs.map(tab => (
 					<button
 						key={tab}
 						className={`ch-tab${activeTab === tab ? ' active' : ''}`}
@@ -83,8 +111,13 @@ export const CharacterPage = () => {
 
 			<div className='ch-railwrap'>
 				{/* Left sticky rail */}
-				<aside className={`ch-rail${activeTab === 'Stats' || activeTab === 'Identity' ? ' ch-rail--mobile-visible' : ''}`}>
-					<CharacterPortrait character={character} onEditImage={() => setActiveModal('imagePicker')} />
+				<aside
+					className={`ch-rail${activeTab === 'Stats' || activeTab === 'Identity' ? ' ch-rail--mobile-visible' : ''}`}
+				>
+					<CharacterPortrait
+						character={character}
+						onEditImage={() => setActiveModal('imagePicker')}
+					/>
 					<IdentityPanel character={character} />
 					<div className='ch-rail-stats'>
 						<StatsRail character={character} />
@@ -93,21 +126,46 @@ export const CharacterPage = () => {
 
 				{/* Right scrolling body */}
 				<main className='ch-rail-body'>
-					<div className={`ch-rail-body-section${activeTab === 'Combat' ? ' ch-section--mobile-visible' : ''}`}>
+					{/*	<div className={`ch-rail-body-section${activeTab === 'Combat' ? ' ch-section--mobile-visible' : ''}`}>
 						<WeaponsSection character={character} onAddItem={() => setActiveModal('addItem')} />
+					</div>*/}
+					{isSpellcaster && (
+						<div
+							className={`ch-rail-body-section${activeTab === 'Spells' ? ' ch-section--mobile-visible' : ''}`}
+						>
+							<SpellsSection
+								character={character}
+								onAddSpell={() => setActiveModal('addSpell')}
+							/>
+						</div>
+					)}
+					<div
+						className={`ch-rail-body-section${activeTab === 'Inventory' ? ' ch-section--mobile-visible' : ''}`}
+					>
+						<InventorySection
+							character={character}
+							onAddItem={() => setActiveModal('addItem')}
+						/>
 					</div>
-					<div className={`ch-rail-body-section${activeTab === 'Spells' ? ' ch-section--mobile-visible' : ''}`}>
-						<SpellsSection character={character} onAddSpell={() => setActiveModal('addSpell')} />
+					<div
+						className={`ch-rail-body-section${activeTab === 'Features' ? ' ch-section--mobile-visible' : ''}`}
+					>
+						<FeaturesSection
+							character={character}
+							onAddFeature={() => setActiveModal('addFeature')}
+						/>
+						<ProficienciesSection
+							character={character}
+							onAddProficiency={() => setActiveModal('addProficiency')}
+						/>
+						<FeatsSection
+							character={character}
+							onAddFeat={() => setActiveModal('addFeat')}
+						/>
 					</div>
-					<div className={`ch-rail-body-section${activeTab === 'Inventory' ? ' ch-section--mobile-visible' : ''}`}>
-						<InventorySection character={character} onAddItem={() => setActiveModal('addItem')} />
-					</div>
-					<div className={`ch-rail-body-section${activeTab === 'Features' ? ' ch-section--mobile-visible' : ''}`}>
-						<FeaturesSection character={character} onAddFeature={() => setActiveModal('addFeature')} />
-						<ProficienciesSection character={character} onAddProficiency={() => setActiveModal('addProficiency')} />
-						<FeatsSection character={character} onAddFeat={() => setActiveModal('addFeat')} />
-					</div>
-					<div className={`ch-rail-body-section${activeTab === 'Notes' ? ' ch-section--mobile-visible' : ''}`}>
+					<div
+						className={`ch-rail-body-section${activeTab === 'Notes' ? ' ch-section--mobile-visible' : ''}`}
+					>
 						<AlliesSection characterId={character.id} />
 						<TextSection character={character} onSaveText={handleSaveText} />
 					</div>
