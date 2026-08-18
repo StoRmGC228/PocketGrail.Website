@@ -1,0 +1,92 @@
+.ch-weapons-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.ch-weapon {
+	padding: 14px 18px;
+	border-bottom: 1px solid var(--border);
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.ch-weapon:last-child {
+	border-bottom: none;
+}
+
+.ch-weapon-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.ch-weapon-head-badges {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.ch-weapon-name {
+	font: 600 14px var(--font-body);
+	color: var(--text);
+}
+
+.ch-magic-badge {
+	padding: 2px 8px;
+	border-radius: 20px;
+	background: rgba(233, 185, 107, 0.12);
+	border: 1px solid rgba(233, 185, 107, 0.3);
+	color: var(--gold);
+	font: 600 10px var(--font-body);
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.ch-weapon-stats {
+	display: flex;
+	gap: 16px;
+}
+
+.ch-weapon-stat {
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+}
+
+.ch-weapon-stat-lbl {
+	font-size: 9px;
+	text-transform: uppercase;
+	letter-spacing: 1.5px;
+	color: var(--text-faint);
+	font-weight: 700;
+}
+
+.ch-weapon-stat-val {
+	font: 600 14px var(--font-body);
+	color: var(--text);
+}
+
+.ch-weapon-props {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+}
+
+.ch-weapon-prop {
+	padding: 2px 8px;
+	border-radius: 6px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid var(--border);
+	color: var(--text-dim);
+	font-size: 11px;
+}
+
+.ch-empty {
+	padding: 24px 18px;
+	color: var(--text-faint);
+	font-size: 13px;
+	text-align: center;
+}

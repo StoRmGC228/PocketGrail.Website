@@ -1,0 +1,77 @@
+.ch-prof-body {
+	padding: 14px 18px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.ch-taggroup {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.ch-taggroup-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.ch-taggroup-title {
+	font-size: 10px;
+	text-transform: uppercase;
+	letter-spacing: 1.8px;
+	color: var(--text-faint);
+	font-weight: 700;
+}
+
+.ch-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.ch-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 4px 10px;
+	border-radius: 20px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid var(--border);
+	color: var(--text);
+	font-size: 12px;
+}
+
+.ch-tag.expert {
+	background: rgba(233, 185, 107, 0.1);
+	border-color: rgba(233, 185, 107, 0.3);
+	color: var(--gold);
+}
+
+.ch-tag em {
+	font-style: normal;
+	font-size: 10px;
+	color: var(--gold);
+}
+
+.ch-tag-del {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: transparent;
+	border: none;
+	color: var(--text-faint);
+	cursor: pointer;
+	padding: 0;
+	transition: all 0.15s;
+	margin-left: 2px;
+}
+
+.ch-tag-del:hover {
+	background: rgba(239, 68, 68, 0.15);
+	color: #ef4444;
+}

@@ -8,9 +8,9 @@ import { HiHome, HiNewspaper, HiCollection, HiUsers } from 'react-icons/hi'
 
 const BOTTOM_TABS = [
 	{ to: '/', label: 'Home', icon: HiHome },
-	{ to: '/news', label: 'News', icon: HiNewspaper },
 	{ to: '/campaigns', label: 'Campaigns', icon: HiCollection },
-	{ to: '/my-campaigns', label: 'Heroes', icon: HiUsers },
+	{ to: '/my-campaigns', label: 'My Campaigns', icon: HiNewspaper },
+	{ to: '/characters', label: 'Characters', icon: HiUsers },
 ]
 
 function BottomTabBar() {

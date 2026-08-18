@@ -10,6 +10,8 @@ import { MyCampaignsPage } from './pages/my-campaigns-page/MyCampaignsPage'
 import { ActiveCampaignsPage } from './pages/active-campaigns-page/ActiveCampaignsPage'
 import { CampaignPage } from './pages/campaign-page/CampaignPage'
 import { JoinRedirectPage } from './pages/JoinRedirectPage'
+import { MyCharactersPage } from './pages/my-characters-page/MyCharactersPage'
+import { CharacterPage } from './pages/character-page/CharacterPage/CharacterPage'
 
 function PublicOnlyRoute({ children }: { children: ReactNode }) {
 	const isAuthenticated = useSelector(selectIsAuthenticated)
@@ -45,6 +47,8 @@ function App() {
 				<Route path='/campaigns' element={<ActiveCampaignsPage />} />
 				<Route path='/campaigns/:id' element={<CampaignPage />} />
 				<Route path='/join/:code' element={<JoinRedirectPage />} />
+				<Route path='/characters' element={<MyCharactersPage />} />
+				<Route path='/characters/:id' element={<CharacterPage />} />
 			</Route>
 		</Routes>
 	)

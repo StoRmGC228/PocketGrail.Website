@@ -1,0 +1,130 @@
+.ccm-cls-modal {
+	max-width: 540px;
+	max-height: 85vh;
+	overflow-y: auto;
+}
+
+.ccm-cls-section {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.ccm-cls-section-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 1.6px;
+	color: var(--text-dim);
+	font-weight: 700;
+}
+
+.ccm-cls-counter {
+	color: var(--accent);
+}
+
+/* Skill grid */
+.ccm-cls-skill-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 6px;
+}
+
+.ccm-cls-skill {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 9px 12px;
+	background: rgba(11, 8, 20, 0.5);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	font: 500 12px var(--font-body);
+	color: var(--text-dim);
+	cursor: pointer;
+	transition: all 0.12s;
+}
+
+.ccm-cls-skill:hover:not(.ccm-cls-skill--disabled) {
+	border-color: var(--border-2);
+	color: var(--text);
+}
+
+.ccm-cls-skill--checked {
+	border-color: rgba(168, 85, 247, 0.5);
+	background: rgba(168, 85, 247, 0.1);
+	color: rgba(216, 180, 254, 0.9);
+}
+
+.ccm-cls-skill--disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.ccm-cls-skill-input {
+	display: none;
+}
+
+/* Starting item pairs */
+.ccm-cls-pairs {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.ccm-cls-pair {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.ccm-cls-option {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	padding: 10px 12px;
+	background: rgba(11, 8, 20, 0.5);
+	border: 1px solid var(--border);
+	border-radius: 10px;
+	text-align: left;
+	cursor: pointer;
+	transition: all 0.12s;
+}
+
+.ccm-cls-option:hover {
+	border-color: var(--border-2);
+}
+
+.ccm-cls-option--active {
+	border-color: rgba(168, 85, 247, 0.6);
+	background: rgba(168, 85, 247, 0.1);
+	box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.2);
+}
+
+.ccm-cls-option-label {
+	font: 700 10px var(--font-body);
+	text-transform: uppercase;
+	letter-spacing: 1.4px;
+	color: var(--text-faint);
+}
+
+.ccm-cls-option--active .ccm-cls-option-label {
+	color: rgba(216, 180, 254, 0.7);
+}
+
+.ccm-cls-option-items {
+	font: 500 12px var(--font-body);
+	color: var(--text);
+	line-height: 1.4;
+}
+
+.ccm-cls-or {
+	font-size: 11px;
+	font-weight: 600;
+	color: var(--text-faint);
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	flex-shrink: 0;
+}

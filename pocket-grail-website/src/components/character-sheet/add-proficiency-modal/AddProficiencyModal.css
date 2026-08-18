@@ -1,0 +1,23 @@
+@import '../../characters/create-character-modal/CreateCharacterModal.css';
+
+.rst-checkboxes {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.rst-checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	color: var(--text-dim);
+	cursor: pointer;
+}
+
+.rst-checkbox-label input[type='checkbox'] {
+	width: 15px;
+	height: 15px;
+	accent-color: var(--accent);
+	cursor: pointer;
+}
