@@ -5,15 +5,7 @@ import { useLogoutMutation } from '../../../api/authApi'
 import { clearUser } from '../../../redux/slices/authSlice'
 import { removeUserCookie } from '../../../utils/authCookie'
 import type { AppDispatch } from '../../../redux/store'
-import {
-	HiHome,
-	HiNewspaper,
-	HiCollection,
-	HiBookOpen,
-	HiUsers,
-	HiGift,
-	HiViewGrid,
-} from 'react-icons/hi'
+import { HiHome, HiNewspaper } from 'react-icons/hi'
 import {
 	HiArrowRightOnRectangle,
 	HiChevronLeft,
@@ -35,14 +27,6 @@ interface NavItem {
 const libraryItems: NavItem[] = [
 	{ to: '/', label: 'Home', icon: HiHome },
 	{ to: '/news', label: 'News', icon: HiNewspaper },
-	{ to: '/campaigns', label: 'Campaigns', icon: HiCollection },
-	{ to: '/my-campaigns', label: 'My Campaigns', icon: HiBookOpen },
-]
-
-const toolItems: NavItem[] = [
-	{ to: '/tools/dice', label: 'Dice', icon: HiViewGrid },
-	{ to: '/tools/loot', label: 'Loot Generator', icon: HiGift },
-	{ to: '/characters', label: 'Characters', icon: HiUsers },
 ]
 
 interface NavItemRowProps {
@@ -282,28 +266,6 @@ export const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
 					{libraryItems.map(item => (
 						<NavItemRow key={item.to} item={item} isCollapsed={isCollapsed} />
 					))}
-
-					{/* Tools section */}
-					<div style={{ marginTop: 16 }}>
-						{!isCollapsed && (
-							<div
-								className="sidebar-section-label"
-								style={{
-									fontSize: 10,
-									textTransform: 'uppercase',
-									letterSpacing: '2.2px',
-									color: 'var(--text-faint)',
-									padding: '8px 20px 4px',
-									fontWeight: 600,
-								}}
-							>
-								Tools
-							</div>
-						)}
-						{toolItems.map(item => (
-							<NavItemRow key={item.to} item={item} isCollapsed={isCollapsed} />
-						))}
-					</div>
 				</nav>
 
 				{/* Footer */}
